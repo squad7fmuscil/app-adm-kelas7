@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>English for Nusantara - Interactive Learning Platform</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Header */
+      .main-header {
+        background: white;
+        padding: 40px;
+        border-radius: 25px;
+        text-align: center;
+        margin-bottom: 40px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        animation: slideDown 0.6s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .main-header h1 {
+        font-size: 3em;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 15px;
+      }
+
+      .main-header p {
+        color: #666;
+        font-size: 1.2em;
+        margin-bottom: 10px;
+      }
+
+      .main-header .subtitle {
+        color: #999;
+        font-size: 0.9em;
+        font-style: italic;
+      }
+
+      /* Navigation when in chapter */
+      .nav-bar {
+        background: white;
+        padding: 15px 30px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-bar.active {
+        display: flex;
+      }
+
+      .back-btn {
+        padding: 10px 25px;
+        background: #f0f4ff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #667eea;
+        transition: all 0.3s;
+      }
+
+      .back-btn:hover {
+        background: #667eea;
+        color: white;
+        transform: translateX(-5px);
+      }
+
+      .chapter-title {
+        font-size: 1.5em;
+        color: #667eea;
+        font-weight: bold;
+      }
+
+      /* Chapter Grid */
+      .chapters-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      .chapter-card {
+        background: white;
+        padding: 35px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out backwards;
+      }
+
+      .chapter-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .chapter-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .chapter-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .chapter-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .chapter-card:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+      .chapter-card:nth-child(6) {
+        animation-delay: 0.6s;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .chapter-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--color-1), var(--color-2));
+      }
+
+      .chapter-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      }
+
+      /* New Chapter 0 Style */
+      .chapter-card.ch0 {
+        --color-1: #5e60ce;
+        --color-2: #8758ff;
+      }
+
+      .chapter-card.ch1 {
+        --color-1: #667eea;
+        --color-2: #764ba2;
+      }
+      .chapter-card.ch2 {
+        --color-1: #f093fb;
+        --color-2: #f5576c;
+      }
+      .chapter-card.ch3 {
+        --color-1: #4facfe;
+        --color-2: #00f2fe;
+      }
+      .chapter-card.ch4 {
+        --color-1: #43e97b;
+        --color-2: #38f9d7;
+      }
+      .chapter-card.ch5 {
+        --color-1: #fa709a;
+        --color-2: #fee140;
+      }
+
+      .chapter-icon {
+        font-size: 3.5em;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .chapter-card h2 {
+        color: #333;
+        font-size: 1.6em;
+        margin-bottom: 15px;
+      }
+
+      .chapter-card .chapter-subtitle {
+        color: #666;
+        font-size: 1em;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+
+      .chapter-card p {
+        color: #888;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .chapter-topics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 15px;
+      }
+
+      .topic-tag {
+        background: #f0f4ff;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        color: #667eea;
+      }
+
+      /* Chapter Content Area */
+      .chapter-content {
+        display: none;
+        animation: fadeIn 0.5s;
+      }
+
+      .chapter-content.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Tabs */
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+      }
+
+      .tab-btn {
+        flex: 1;
+        min-width: 150px;
+        padding: 15px 20px;
+        background: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .tab-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .tab-btn.active {
+        color: white;
+      }
+
+      /* Content Box */
+      .content-box {
+        background: white;
+        padding: 35px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        min-height: 500px;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s;
+      }
+
+      h2 {
+        font-size: 2em;
+        margin-bottom: 25px;
+      }
+
+      h3 {
+        font-size: 1.4em;
+        margin-top: 30px;
+        margin-bottom: 15px;
+      }
+
+      .info-box {
+        background: #f8f9ff;
+        padding: 25px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 5px solid;
+      }
+
+      .example-box {
+        background: #fffbf0;
+        padding: 25px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 5px solid #ffc107;
+      }
+
+      .practice-box {
+        background: #f0fff4;
+        padding: 25px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 5px solid #43e97b;
+      }
+
+      ul,
+      ol {
+        margin-left: 25px;
+        line-height: 2;
+      }
+
+      .highlight {
+        background: #ffeb3b;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: 600;
+      }
+
+      /* Quiz Styles */
+      .quiz-container {
+        margin-top: 20px;
+      }
+
+      .question-card {
+        background: #f8f9ff;
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        border-left: 5px solid #667eea;
+      }
+
+      .question-text {
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #333;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .option-btn {
+        padding: 15px 20px;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        cursor: pointer;
+        text-align: left;
+        transition: all 0.3s;
+        font-size: 1em;
+      }
+
+      .option-btn:hover {
+        border-color: #667eea;
+        background: #f0f4ff;
+      }
+
+      .option-btn.selected {
+        border-color: #667eea;
+        background: #667eea;
+        color: white;
+      }
+
+      .option-btn.correct {
+        border-color: #43e97b;
+        background: #43e97b;
+        color: white;
+      }
+
+      .option-btn.wrong {
+        border-color: #f5576c;
+        background: #f5576c;
+        color: white;
+      }
+
+      .submit-quiz-btn {
+        margin-top: 20px;
+        padding: 15px 40px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .submit-quiz-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .quiz-result {
+        margin-top: 25px;
+        padding: 25px;
+        border-radius: 15px;
+        display: none;
+        animation: fadeIn 0.5s;
+      }
+
+      .quiz-result.show {
+        display: block;
+      }
+
+      /* Writing Area */
+      textarea {
+        width: 100%;
+        min-height: 250px;
+        padding: 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 1em;
+        font-family: inherit;
+        resize: vertical;
+        transition: border-color 0.3s;
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: #f0f4ff;
+        color: #667eea;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+      }
+
+      /* Footer */
+      .footer {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        margin-top: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .footer p {
+        color: #666;
+        margin: 5px 0;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .main-header h1 {
+          font-size: 2em;
+        }
+
+        .chapters-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .tabs {
+          flex-direction: column;
+        }
+
+        .tab-btn {
+          min-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="main-header" id="mainHeader">
+        <h1>🎓 English for Nusantara</h1>
+        <p>Interactive Learning Platform - Kelas 7</p>
+        <p class="subtitle">
+          Belajar Bahasa Inggris dengan Cara yang Menyenangkan!
+        </p>
+      </div>
+
+      <div class="nav-bar" id="navBar">
+        <button class="back-btn" onclick="goHome()">← Kembali ke Home</button>
+        <span class="chapter-title" id="currentChapterTitle"></span>
+      </div>
+
+      <div id="homepage">
+        <div class="chapters-grid">
+          <div class="chapter-card ch0" onclick="openChapter(0)">
+            <span class="chapter-icon">✨</span>
+            <h2>Chapter 0</h2>
+            <p class="chapter-subtitle">The Beginning</p>
+            <p>
+              Materi dasar Bahasa Inggris: Mengenal Alfabet, Angka, Hari, Bulan,
+              dan Salam (Greetings).
+            </p>
+            <div class="chapter-topics">
+              <span class="topic-tag">Alphabets</span>
+              <span class="topic-tag">Numbers</span>
+              <span class="topic-tag">Greetings</span>
+            </div>
+          </div>
+
+          <div class="chapter-card ch1" onclick="openChapter(1)">
+            <span class="chapter-icon">👤</span>
+            <h2>Chapter 1</h2>
+            <p class="chapter-subtitle">About Me</p>
+            <p>
+              Belajar cara memperkenalkan diri, mendeskripsikan hobi, dan
+              menggambarkan teman-temanmu dalam Bahasa Inggris.
+            </p>
+            <div class="chapter-topics">
+              <span class="topic-tag">Self Introduction</span>
+              <span class="topic-tag">Hobbies</span>
+              <span class="topic-tag">Describing People</span>
+            </div>
+          </div>
+
+          <div class="chapter-card ch2" onclick="openChapter(2)">
+            <span class="chapter-icon">🍜</span>
+            <h2>Chapter 2</h2>
+            <p class="chapter-subtitle">Culinary and Me</p>
+            <p>
+              Pelajari cara mendeskripsikan makanan favorit dan menulis resep
+              dalam Bahasa Inggris.
+            </p>
+            <div class="chapter-topics">
+              <span class="topic-tag">Food Vocabulary</span>
+              <span class="topic-tag">Recipe</span>
+              <span class="topic-tag">Procedure Text</span>
+            </div>
+          </div>
+
+          <div class="chapter-card ch3" onclick="openChapter(3)">
+            <span class="chapter-icon">🏠</span>
+            <h2>Chapter 3</h2>
+            <p class="chapter-subtitle">Home Sweet Home</p>
+            <p>
+              Deskripsikan rumahmu, ruangan favorit, dan pekerjaan rumah tangga
+              dalam Bahasa Inggris.
+            </p>
+            <div class="chapter-topics">
+              <span class="topic-tag">House & Rooms</span>
+              <span class="topic-tag">Prepositions</span>
+              <span class="topic-tag">Instructions</span>
+            </div>
+          </div>
+
+          <div class="chapter-card ch4" onclick="openChapter(4)">
+            <span class="chapter-icon">📚</span>
+            <h2>Chapter 4</h2>
+            <p class="chapter-subtitle">My School Activities</p>
+            <p>
+              Ceritakan jadwal sekolah, kelas online, dan kebiasaan belajarmu.
+            </p>
+            <div class="chapter-topics">
+              <span class="topic-tag">School Subjects</span>
+              <span class="topic-tag">Daily Routine</span>
+              <span class="topic-tag">Time Expressions</span>
+            </div>
+          </div>
+
+          <div class="chapter-card ch5" onclick="openChapter(5)">
+            <span class="chapter-icon">🏫</span>
+            <h2>Chapter 5</h2>
+            <p class="chapter-subtitle">This is My School</p>
+            <p>
+              Jelaskan fasilitas sekolah, kegiatan ekstrakurikuler, dan acara
+              sekolah.
+            </p>
+            <div class="chapter-topics">
+              <span class="topic-tag">School Facilities</span>
+              <span class="topic-tag">Extracurricular</span>
+              <span class="topic-tag">Recount Text</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p><strong>English for Nusantara Interactive Platform</strong></p>
+          <p>Kurikulum Merdeka - Kelas 7 SMP/MTs</p>
+          <p style="margin-top: 15px; font-size: 0.9em">
+            💡 Klik chapter untuk mulai belajar!
+          </p>
+        </div>
+      </div>
+
+      <div id="chapterContent" class="chapter-content"></div>
+    </div>
+
+    <script>
+      let currentChapter = 0;
+      let quizAnswers = {};
+
+      function openChapter(chapterNum) {
+        currentChapter = chapterNum;
+        document.getElementById("homepage").style.display = "none";
+        document.getElementById("mainHeader").style.display = "none";
+        document.getElementById("navBar").classList.add("active");
+
+        const chapterContent = document.getElementById("chapterContent");
+        chapterContent.classList.add("active");
+
+        loadChapterContent(chapterNum);
+      }
+
+      function goHome() {
+        document.getElementById("homepage").style.display = "block";
+        document.getElementById("mainHeader").style.display = "block";
+        document.getElementById("navBar").classList.remove("active");
+        document.getElementById("chapterContent").classList.remove("active");
+        document.getElementById("chapterContent").innerHTML = "";
+        currentChapter = 0;
+        window.scrollTo(0, 0);
+      }
+
+      function loadChapterContent(chapterNum) {
+        const chapters = {
+          0: getChapter0Content(), // ADDED CHAPTER 0
+          1: getChapter1Content(),
+          2: getChapter2Content(),
+          3: getChapter3Content(), // UPDATED
+          4: getChapter4Content(), // UPDATED
+          5: getChapter5Content(), // UPDATED
+        };
+
+        document.getElementById("currentChapterTitle").textContent =
+          getChapterTitle(chapterNum);
+        document.getElementById("chapterContent").innerHTML =
+          chapters[chapterNum];
+        window.scrollTo(0, 0);
+      }
+
+      function getChapterTitle(num) {
+        const titles = {
+          0: "Chapter 0: The Beginning", // ADDED
+          1: "Chapter 1: About Me",
+          2: "Chapter 2: Culinary and Me",
+          3: "Chapter 3: Home Sweet Home",
+          4: "Chapter 4: My School Activities",
+          5: "Chapter 5: This is My School",
+        };
+        return titles[num];
+      }
+
+      function showTab(tabName, chapterNum) {
+        const tabs = document.querySelectorAll(
+          `#chapter${chapterNum} .tab-content`
+        );
+        const btns = document.querySelectorAll(
+          `#chapter${chapterNum} .tab-btn`
+        );
+
+        tabs.forEach((tab) => tab.classList.remove("active"));
+        btns.forEach((btn) => btn.classList.remove("active"));
+
+        document
+          .getElementById(`${tabName}-${chapterNum}`)
+          .classList.add("active");
+        event.target.classList.add("active");
+      }
+
+      // =================================================================
+      // NEW FUNCTION FOR CHAPTER 0: THE BEGINNING
+      // =================================================================
+      function getChapter0Content() {
+        const color1 = "#5e60ce";
+        const color2 = "#8758ff";
+
+        return `
+              <div id="chapter0">
+                  <div class="tabs">
+                      <button class="tab-btn active" style="background: linear-gradient(135deg, ${color1} 0%, ${color2} 100%); color: white;" onclick="showTab('theory', 0)">📚 Theory</button>
+                      <button class="tab-btn" style="color: ${color1};" onclick="showTab('examples', 0)">📖 Examples</button>
+                      <button class="tab-btn" style="color: ${color1};" onclick="showTab('practice', 0)">✍️ Practice</button>
+                      <button class="tab-btn" style="color: ${color1};" onclick="showTab('quiz', 0)">🎯 Quiz</button>
+                  </div>
+
+                  <div class="content-box">
+                      <div id="theory-0" class="tab-content active">
+                          <h2>📚 Chapter 0: The Beginning</h2>
+                          
+                          <div class="info-box" style="border-left-color: ${color1};">
+                              <h3>🎯 Learning Objectives</h3>
+                              <p>Setelah mempelajari chapter ini, kamu akan bisa:</p>
+                              <ul>
+                                  <li>Menyebutkan dan mengeja alfabet, angka, hari, dan bulan dalam Bahasa Inggris</li>
+                                  <li>Mengucapkan salam (greetings) dan perpisahan (parting)</li>
+                                  <li>Memberikan dan memahami instruksi sederhana di kelas (simple instructions)</li>
+                              </ul>
+                          </div>
+
+                          <h3>Unit 1: English Alphabets and Numbers</h3>
+                          <div class="info-box" style="border-left-color: ${color2};">
+                              <h4>A. The Alphabet:</h4>
+                              <p>Sangat penting untuk tahu cara pengucapan setiap huruf (spelling). Contoh: 'B' dibaca /bi:/, 'W' dibaca /'dʌbəl ju:/. (Coba cari audio pronunciation di Google ya!)</p>
+                              
+                              <h4 style="margin-top: 20px;">B. Numbers:</h4>
+                              <p><strong>Cardinal Numbers (Jumlah):</strong> One, Two, Three, ... Twelve, Twenty, One hundred. (Contoh: I have two brothers)</p>
+                              <p><strong>Ordinal Numbers (Urutan):</strong> First (1st), Second (2nd), Third (3rd), Fourth (4th), Fifth (5th). (Contoh: I am the first winner)</p>
+                          </div>
+                          
+                          <div class="example-box">
+                              <h4>📝 Example:</h4>
+                              <p><strong>Spelling:</strong> How do you spell 'apple'? <span class="highlight">A-P-P-L-E</span>.</p>
+                              <p><strong>Numbers:</strong> My brother has <span class="highlight">three</span> books. (Cardinal)</p>
+                              <p>I am the <span class="highlight">first</span> winner in the competition. (Ordinal)</p>
+                          </div>
+                          
+                          <h3>Unit 2: Greetings, Days, and Time</h3>
+                          <div class="info-box" style="border-left-color: ${color2};">
+                              <h4>A. Greetings (Salam):</h4>
+                              <ul>
+                                  <li>Good morning (00:00 - 12:00)</li>
+                                  <li>Good afternoon (12:00 - 18:00)</li>
+                                  <li>Good evening (18:00 - 00:00)</li>
+                                  <li>Good night (Diucapkan saat akan tidur atau berpisah di malam hari)</li>
+                              </ul>
+                              
+                              <h4 style="margin-top: 20px;">B. Days of the Week:</h4>
+                              <p>Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday.</p>
+                              
+                              <h4 style="margin-top: 20px;">C. Months of the Year:</h4>
+                              <p>January, February, March, April, May, June, July, August, September, October, November, December.</p>
+                          </div>
+
+                          <h3>Unit 3: Simple Instructions (Instruksi Sederhana)</h3>
+                          <div class="practice-box" style="border-left-color: #43e97b;">
+                              <h4>Common Classroom Instructions:</h4>
+                              <ul>
+                                  <li><span class="highlight">Open your book.</span> (Buka bukumu)</li>
+                                  <li><span class="highlight">Close the door.</span> (Tutup pintunya)</li>
+                                  <li><span class="highlight">Stand up / Sit down.</span> (Berdiri / Duduk)</li>
+                                  <li><span class="highlight">Listen to me.</span> (Dengarkan saya)</li>
+                                  <li><span class="highlight">Pay attention.</span> (Perhatikan)</li>
+                              </ul>
+                          </div>
+                      </div>
+
+                      <div id="examples-0" class="tab-content">
+                          <h2>📖 Examples & Dialogues</h2>
+                          <div class="example-box">
+                              <h3>Example 1: Greeting and Spelling</h3>
+                              <div style="background: white; padding: 20px; border-radius: 10px;">
+                                  <p><strong>Teacher:</strong> Good morning, class!</p>
+                                  <p><strong>Students:</strong> Good morning, Ma'am.</p>
+                                  <p><strong>Teacher:</strong> Please, stand up and greet your friends. You can sit down now. Thank you.</p>
+                                  <p style="margin-top: 15px;"><strong>Ayu:</strong> Hello, my name is Ayu.</p>
+                                  <p><strong>Bima:</strong> Hi Ayu! I am Bima. How do you spell your name?</p>
+                                  <p><strong>Ayu:</strong> It is <span class="highlight">A-Y-U</span>.</p>
+                              </div>
+                          </div>
+                          <div class="example-box">
+                              <h3>Example 2: Numbers and Time</h3>
+                              <div style="background: white; padding: 20px; border-radius: 10px;">
+                                  <p><strong>Rani:</strong> Look! There are <span class="highlight">ten</span> beautiful flowers.</p>
+                                  <p><strong>Sinta:</strong> Wow, you are right! What day is today?</p>
+                                  <p><strong>Rani:</strong> Today is <span class="highlight">Monday</span>, the <span class="highlight">third</span> of <span class="highlight">November</span>.</p>
+                                  <p><strong>Sinta:</strong> What time is it now?</p>
+                                  <p><strong>Rani:</strong> It is <span class="highlight">seven o'clock</span> in the morning.</p>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <div id="practice-0" class="tab-content">
+                          <h2>✍️ Simple Practice</h2>
+                          <div class="practice-box">
+                              <h3>📝 Task 1: Complete the Greetings</h3>
+                              <p>Isilah bagian kosong dengan kata yang tepat (Good morning, Good afternoon, Good evening, Good night).</p>
+                              <p style="margin-top: 15px;">1. It is 06:30 AM. You say: ___________</p>
+                              <p>2. It is 03:00 PM. You say: ___________</p>
+                              <p>3. It is 07:45 PM. You say: ___________</p>
+                              <p>4. You are going to sleep. You say: ___________</p>
+                              <textarea id="practice0-1" placeholder="Write your answers here."></textarea>
+                              <div class="btn-group">
+                                  <button class="btn btn-primary" onclick="checkPractice(0, 1)">🔍 Check</button>
+                                  <button class="btn btn-secondary" onclick="clearPractice(0, 1)">🗑️ Clear</button>
+                              </div>
+                              <div id="feedback0-1" style="margin-top: 15px;"></div>
+                          </div>
+                      </div>
+                      
+                      <div id="quiz-0" class="tab-content">
+                          <h2>🎯 Quiz Time!</h2>
+                          <p style="margin-bottom: 25px;">Uji pemahamanmu tentang Chapter 0! Pilih jawaban yang paling tepat.</p>
+                          <div class="quiz-container">
+                              <div class="question-card">
+                                  <p class="question-text">1. What is the spelling for the letter 'U'?</p>
+                                  <div class="options">
+                                      <button class="option-btn" onclick="selectOption(0, 1, 'A')">A. /yu:/</button>
+                                      <button class="option-btn" onclick="selectOption(0, 1, 'B')">B. /ju:/</button>
+                                      <button class="option-btn" onclick="selectOption(0, 1, 'C')">C. /ou/</button>
+                                      <button class="option-btn" onclick="selectOption(0, 1, 'D')">D. /i:/</button>
+                                  </div>
+                              </div>
+                              <div class="question-card">
+                                  <p class="question-text">2. Which word is a Cardinal Number?</p>
+                                  <div class="options">
+                                      <button class="option-btn" onclick="selectOption(0, 2, 'A')">A. Second</button>
+                                      <button class="option-btn" onclick="selectOption(0, 2, 'B')">B. Twelve</button>
+                                      <button class="option-btn" onclick="selectOption(0, 2, 'C')">C. Tenth</button>
+                                      <button class="option-btn" onclick="selectOption(0, 2, 'D')">D. Fifth</button>
+                                  </div>
+                              </div>
+                              <div class="question-card">
+                                  <p class="question-text">3. If today is Monday, what day is tomorrow?</p>
+                                  <div class="options">
+                                      <button class="option-btn" onclick="selectOption(0, 3, 'A')">A. Sunday</button>
+                                      <button class="option-btn" onclick="selectOption(0, 3, 'B')">B. Tuesday</button>
+                                      <button class="option-btn" onclick="selectOption(0, 3, 'C')">C. Thursday</button>
+                                      <button class="option-btn" onclick="selectOption(0, 3, 'D')">D. Friday</button>
+                                  </div>
+                              </div>
+                              <div class="question-card">
+                                  <p class="question-text">4. What do you say when you want your friend to stop talking?</p>
+                                  <div class="options">
+                                      <button class="option-btn" onclick="selectOption(0, 4, 'A')">A. Stand up!</button>
+                                      <button class="option-btn" onclick="selectOption(0, 4, 'B')">B. Listen to me!</button>
+                                      <button class="option-btn" onclick="selectOption(0, 4, 'C')">C. Open your book!</button>
+                                      <button class="option-btn" onclick="selectOption(0, 4, 'D')">D. Good afternoon!</button>
+                                  </div>
+                              </div>
+                          </div>
+                          <button class="submit-quiz-btn" onclick="submitQuiz(0)">Submit Quiz</button>
+                          <div id="quizResult0" class="quiz-result"></div>
+                      </div>
+                  </div>
+              </div>
+          `;
+      }
+      // =================================================================
+      // END CHAPTER 0 CONTENT
+      // =================================================================
+
+      function getChapter1Content() {
+        return `
+                <div id="chapter1">
+                    <div class="tabs">
+                        <button class="tab-btn active" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;" onclick="showTab('theory', 1)">📚 Theory</button>
+                        <button class="tab-btn" style="color: #667eea;" onclick="showTab('examples', 1)">📖 Examples</button>
+                        <button class="tab-btn" style="color: #667eea;" onclick="showTab('practice', 1)">✍️ Practice</button>
+                        <button class="tab-btn" style="color: #667eea;" onclick="showTab('quiz', 1)">🎯 Quiz</button>
+                    </div>
+
+                    <div class="content-box">
+                        <div id="theory-1" class="tab-content active">
+                            <h2>📚 Chapter 1: About Me</h2>
+                            
+                            <div class="info-box" style="border-left-color: #667eea;">
+                                <h3>🎯 Learning Objectives</h3>
+                                <p>Setelah mempelajari chapter ini, kamu akan bisa:</p>
+                                <ul>
+                                    <li>Memperkenalkan diri dalam Bahasa Inggris</li>
+                                    <li>Menjelaskan hobi dan kesukaanmu</li>
+                                    <li>Mendeskripsikan penampilan dan kepribadian seseorang</li>
+                                    <li>Menggunakan Simple Present Tense dengan benar</li>
+                                </ul>
+                            </div>
+
+                            <h3>Unit 1: Self Introduction (Perkenalan Diri)</h3>
+                            <div class="info-box" style="border-left-color: #764ba2;">
+                                <h4>Key Expressions:</h4>
+                                <ul>
+                                    <li><span class="highlight">My name is...</span> / <span class="highlight">I am...</span></li>
+                                    <li><span class="highlight">I am ... years old</span></li>
+                                    <li><span class="highlight">I am from...</span> / <span class="highlight">I live in...</span></li>
+                                    <li><span class="highlight">I am a student at...</span></li>
+                                </ul>
+                            </div>
+
+                            <div class="example-box">
+                                <h4>📝 Example:</h4>
+                                <p><strong>Hello! My name is Galang.</strong> I am twelve years old. I am from Kalimantan. I live in Samarinda. I am a student at SMP Merdeka.</p>
+                            </div>
+
+                            <h3>Unit 2: Hobbies and Interests</h3>
+                            <div class="info-box" style="border-left-color: #764ba2;">
+                                <h4>Key Expressions:</h4>
+                                <ul>
+                                    <li><span class="highlight">I like...</span> / <span class="highlight">I love...</span></li>
+                                    <li><span class="highlight">My hobby is...</span></li>
+                                    <li><span class="highlight">I enjoy...</span></li>
+                                    <li><span class="highlight">In my free time, I...</span></li>
+                                </ul>
+                                
+                                <h4 style="margin-top: 20px;">Frequency Adverbs:</h4>
+                                <ul>
+                                    <li><span class="highlight">always</span> (selalu) - 100%</li>
+                                    <li><span class="highlight">usually</span> (biasanya) - 80%</li>
+                                    <li><span class="highlight">often</span> (sering) - 60%</li>
+                                    <li><span class="highlight">sometimes</span> (kadang-kadang) - 40%</li>
+                                    <li><span class="highlight">rarely</span> (jarang) - 20%</li>
+                                    <li><span class="highlight">never</span> (tidak pernah) - 0%</li>
+                                </ul>
+                            </div>
+
+                            <div class="example-box">
+                                <h4>📝 Example:</h4>
+                                <p>I <span class="highlight">love</span> fishing. I <span class="highlight">usually</span> go fishing on weekends. I <span class="highlight">often</span> go to the river near my house. Fishing makes me happy and relaxed.</p>
+                            </div>
+
+                            <h3>Unit 3: Describing People</h3>
+                            <div class="info-box" style="border-left-color: #764ba2;">
+                                <h4>Physical Appearance (Penampilan Fisik):</h4>
+                                <ul>
+                                    <li><strong>Height:</strong> tall, short, medium height</li>
+                                    <li><strong>Body:</strong> thin, slim, fat, chubby, athletic</li>
+                                    <li><strong>Hair:</strong> long, short, curly, straight, wavy, black, brown, blonde</li>
+                                    <li><strong>Eyes:</strong> black, brown, blue, green, big, small</li>
+                                    <li><strong>Face:</strong> round, oval, square</li>
+                                </ul>
+
+                                <h4 style="margin-top: 20px;">Personality (Kepribadian):</h4>
+                                <ul>
+                                    <li>kind, friendly, nice, polite</li>
+                                    <li>smart, clever, intelligent</li>
+                                    <li>funny, cheerful, happy</li>
+                                    <li>patient, calm, quiet</li>
+                                    <li>diligent, hardworking</li>
+                                    <li>brave, confident</li>
+                                </ul>
+                            </div>
+
+                            <div class="example-box">
+                                <h4>📝 Example:</h4>
+                                <p><strong>My Best Friend</strong></p>
+                                <p>I have a best friend. His name is Andre. He is thirteen years old.</p>
+                                <p>Andre is <span class="highlight">tall</span> and <span class="highlight">thin</span>. He has <span class="highlight">short black hair</span> and <span class="highlight">brown eyes</span>. He has an <span class="highlight">oval face</span>.</p>
+                                <p>Andre is a very <span class="highlight">kind</span> and <span class="highlight">friendly</span> person. He is also very <span class="highlight">smart</span>. He likes playing basketball and reading comics.</p>
+                            </div>
+
+                            <h3>Grammar Focus: Simple Present Tense</h3>
+                            <div class="info-box" style="border-left-color: #667eea;">
+                                <h4>Formula:</h4>
+                                <p><strong>With "to be" (am/is/are):</strong></p>
+                                <ul>
+                                    <li>I <span class="highlight">am</span> a student</li>
+                                    <li>He/She/It <span class="highlight">is</span> smart</li>
+                                    <li>You/We/They <span class="highlight">are</span> kind</li>
+                                </ul>
+
+                                <p style="margin-top: 15px;"><strong>With verbs:</strong></p>
+                                <ul>
+                                    <li>I/You/We/They <span class="highlight">like</span> music</li>
+                                    <li>He/She/It <span class="highlight">likes</span> music (tambah -s/-es)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="examples-1" class="tab-content">
+                            <h2>📖 Examples & Dialogues</h2>
+
+                            <div class="example-box">
+                                <h3>Example 1: Self Introduction</h3>
+                                <p style="font-style: italic; margin-bottom: 15px;">Contoh perkenalan diri lengkap</p>
+                                <div style="background: white; padding: 20px; border-radius: 10px;">
+                                    <p><strong>Hi everyone! Let me introduce myself.</strong></p>
+                                    <p style="margin-top: 10px;">My name is Siti Nurhaliza. You can call me Siti. I am thirteen years old. My birthday is on May 15th.</p>
+                                    <p style="margin-top: 10px;">I am from Jakarta, but now I live in Bandung. I am a student at SMP Nusantara 5 Bandung. I am in grade 7.</p>
+                                    <p style="margin-top: 10px;">I love reading books and listening to music. My favorite subject is English. I also like Math.</p>
+                                    <p style="margin-top: 10px;">Nice to meet you all!</p>
+                                </div>
+                            </div>
+
+                            <div class="example-box">
+                                <h3>Example 2: Talking About Hobbies</h3>
+                                <p style="font-style: italic; margin-bottom: 15px;">Dialog tentang hobi</p>
+                                <div style="background: white; padding: 20px; border-radius: 10px;">
+                                    <p><strong>Andi:</strong> Hi, Budi! What do you like to do in your free time?</p>
+                                    <p><strong>Budi:</strong> I love playing football. I usually play football every Sunday morning.</p>
+                                    <p><strong>Andi:</strong> That's cool! Who do you play with?</p>
+                                    <p><strong>Budi:</strong> I play with my friends from school. Sometimes we play at the field near my house.</p>
+                                    <p><strong>Andi:</strong> Do you like watching football too?</p>
+                                    <p><strong>Budi:</strong> Yes, I do! I often watch football matches on TV. My favorite team is Persija Jakarta.</p>
+                                </div>
+                            </div>
+
+                            <div class="example-box">
+                                <h3>Example 3: Describing a Friend</h3>
+                                <div style="background: white; padding: 20px; border-radius: 10px;">
+                                    <p><strong>Title: My Classmate, Rina</strong></p>
+                                    <p style="margin-top: 15px;"><u>Identification:</u></p>
+                                    <p>I have a classmate. Her name is Rina. She sits next to me in class. She is my good friend.</p>
+                                    
+                                    <p style="margin-top: 15px;"><u>Description - Physical Appearance:</u></p>
+                                    <p>Rina is not too tall and not too short. She has long straight black hair. She usually ties her hair in a ponytail. She has beautiful brown eyes and a round face. She always wears her school uniform neatly.</p>
+                                    
+                                    <p style="margin-top: 15px;"><u>Description - Personality & Habits:</u></p>
+                                    <p>Rina is a very kind and friendly girl. She is also very smart and diligent. She always does her homework on time. She likes helping her friends when they have difficulties. Rina loves reading books. She often goes to the library during break time. She also likes drawing. Her drawings are very beautiful.</p>
+                                    
+                                    <p style="margin-top: 15px;"><u>Conclusion:</u></p>
+                                    <p>I am very happy to have a friend like Rina. She is a good friend and a good student.</p>
+                                </div>
+                            </div>
+
+                            <div class="practice-box">
+                                <h3>💡 Vocabulary Bank</h3>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                                    <div>
+                                        <strong>Hobbies:</strong>
+                                        <ul style="margin-top: 5px; font-size: 0.95em;">
+                                            <li>reading (membaca)</li>
+                                            <li>fishing (memancing)</li>
+                                            <li>swimming (berenang)</li>
+                                            <li>cooking (memasak)</li>
+                                            <li>drawing (menggambar)</li>
+                                            <li>singing (menyanyi)</li>
+                                            <li>dancing (menari)</li>
+                                            <li>playing games (bermain game)</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <strong>Sports:</strong>
+                                        <ul style="margin-top: 5px; font-size: 0.95em;">
+                                            <li>football (sepak bola)</li>
+                                            <li>basketball (bola basket)</li>
+                                            <li>badminton (bulu tangkis)</li>
+                                            <li>volleyball (bola voli)</li>
+                                            <li>cycling (bersepeda)</li>
+                                            <li>running (lari)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="practice-1" class="tab-content">
+                            <h2>✍️ Writing Practice</h2>
+                            
+                            <div class="practice-box">
+                                <h3>📝 Task 1: Write Your Self Introduction</h3>
+                                <p>Tulislah perkenalan dirimu sendiri! Gunakan struktur berikut:</p>
+                                <ul>
+                                    <li>Name and age</li>
+                                    <li>Where you are from</li>
+                                    <li>Your school</li>
+                                    <li>Your hobbies and interests</li>
+                                    <li>Your favorite subject</li>
+                                </ul>
+                                <textarea id="practice1-1" placeholder="Start writing here...&#x0a;&#x0a;Example:&#x0a;Hello! My name is..."></textarea>
+                                <div class="btn-group">
+                                    <button class="btn btn-primary" onclick="checkPractice(1, 1)">🔍 Check</button>
+                                    <button class="btn btn-secondary" onclick="clearPractice(1, 1)">🗑️ Clear</button>
+                                </div>
+                                <div id="feedback1-1" style="margin-top: 15px;"></div>
+                            </div>
+
+                            <div class="practice-box" style="margin-top: 30px;">
+                                <h3>📝 Task 2: Describe Your Best Friend</h3>
+                                <p>Deskripsikan teman baikmu! Jangan lupa untuk menjelaskan:</p>
+                                <ul>
+                                    <li>Who is he/she? (name, age)</li>
+                                    <li>Physical appearance (tinggi, rambut, mata, dll)</li>
+                                    <li>Personality (sifat-sifatnya)</li>
+                                    <li>Hobbies and interests</li>
+                                    <li>Why you like him/her</li>
+                                </ul>
+                                <textarea id="practice1-2" placeholder="Start writing here...&#x0a;&#x0a;Example:&#x0a;I have a best friend. His/Her name is..."></textarea>
+                                <div class="btn-group">
+                                    <button class="btn btn-primary" onclick="checkPractice(1, 2)">🔍 Check</button>
+                                    <button class="btn btn-secondary" onclick="clearPractice(1, 2)">🗑️ Clear</button>
+                                </div>
+                                <div id="feedback1-2" style="margin-top: 15px;"></div>
+                            </div>
+
+                            <div class="info-box" style="margin-top: 30px; border-left-color: #43e97b;">
+                                <h3>💡 Writing Tips:</h3>
+                                <ul>
+                                    <li>Gunakan Simple Present Tense</li>
+                                    <li>Pakai kata sifat (adjectives) yang bervariasi</li>
+                                    <li>Buat kalimat yang runtut dan jelas</li>
+                                    <li>Cek ejaan (spelling) sebelum submit</li>
+                                    <li>Minimal 5-7 kalimat</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="quiz-1" class="tab-content">
+                            <h2>🎯 Quiz Time!</h2>
+                            <p style="margin-bottom: 25px;">Uji pemahamanmu tentang Chapter 1! Pilih jawaban yang paling tepat.</p>
+
+                            <div class="quiz-container">
+                                <div class="question-card">
+                                    <p class="question-text">1. "My name _____ Siti and I _____ from Jakarta."</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(1, 1, 'A')">A. am / is</button>
+                                        <button class="option-btn" onclick="selectOption(1, 1, 'B')">B. is / am</button>
+                                        <button class="option-btn" onclick="selectOption(1, 1, 'C')">C. are / am</button>
+                                        <button class="option-btn" onclick="selectOption(1, 1, 'D')">D. am / are</button>
+                                    </div>
+                                </div>
+
+                                <div class="question-card">
+                                    <p class="question-text">2. "She _____ playing badminton every Sunday."</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(1, 2, 'A')">A. like</button>
+                                        <button class="option-btn" onclick="selectOption(1, 2, 'B')">B. likes</button>
+                                        <button class="option-btn" onclick="selectOption(1, 2, 'C')">C. liking</button>
+                                        <button class="option-btn" onclick="selectOption(1, 2, 'D')">D. to like</button>
+                                    </div>
+                                </div>
+
+                                <div class="question-card">
+                                    <p class="question-text">3. Which sentence is correct?</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(1, 3, 'A')">A. He have long hair</button>
+                                        <button class="option-btn" onclick="selectOption(1, 3, 'B')">B. He has long hair</button>
+                                        <button class="option-btn" onclick="selectOption(1, 3, 'C')">C. He having long hair</button>
+                                        <button class="option-btn" onclick="selectOption(1, 3, 'D')">D. He is have long hair</button>
+                                    </div>
+                                </div>
+
+                                <div class="question-card">
+                                    <p class="question-text">4. "I _____ go to the library. I go there every day."</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(1, 4, 'A')">A. never</button>
+                                        <button class="option-btn" onclick="selectOption(1, 4, 'B')">B. rarely</button>
+                                        <button class="option-btn" onclick="selectOption(1, 4, 'C')">C. sometimes</button>
+                                        <button class="option-btn" onclick="selectOption(1, 4, 'D')">D. always</button>
+                                    </div>
+                                </div>
+
+                                <div class="question-card">
+                                    <p class="question-text">5. What is the correct order for describing a person?</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(1, 5, 'A')">A. Personality - Identification - Physical appearance</button>
+                                        <button class="option-btn" onclick="selectOption(1, 5, 'B')">B. Physical appearance - Identification - Personality</button>
+                                        <button class="option-btn" onclick="selectOption(1, 5, 'C')">C. Identification - Physical appearance - Personality</button>
+                                        <button class="option-btn" onclick="selectOption(1, 5, 'D')">D. Identification - Personality - Physical appearance</button>
+                                    </div>
+                                </div>
+
+                                <div class="question-card">
+                                    <p class="question-text">6. "My sister is very _____. She always helps people."</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(1, 6, 'A')">A. tall</button>
+                                        <button class="option-btn" onclick="selectOption(1, 6, 'B')">B. kind</button>
+                                        <button class="option-btn" onclick="selectOption(1, 6, 'C')">C. curly</button>
+                                        <button class="option-btn" onclick="selectOption(1, 6, 'D')">D. short</button>
+                                    </div>
+                                </div>
+
+                                <div class="question-card">
+                                    <p class="question-text">7. Choose the sentence with the correct Simple Present Tense:</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(1, 7, 'A')">A. They doesn't like Math</button>
+                                        <button class="option-btn" onclick="selectOption(1, 7, 'B')">B. She don't likes English</button>
+                                        <button class="option-btn" onclick="selectOption(1, 7, 'C')">C. He doesn't likes music</button>
+                                        <button class="option-btn" onclick="selectOption(1, 7, 'D')">D. We don't like swimming</button>
+                                    </div>
+                                </div>
+
+                                <div class="question-card">
+                                    <p class="question-text">8. "_____ is your hobby?" - "I like reading books."</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(1, 8, 'A')">A. Who</button>
+                                        <button class="option-btn" onclick="selectOption(1, 8, 'B')">B. What</button>
+                                        <button class="option-btn" onclick="selectOption(1, 8, 'C')">C. Where</button>
+                                        <button class="option-btn" onclick="selectOption(1, 8, 'D')">D. When</button>
+                                    </div>
+                                </div>
+
+                                <div class="question-card">
+                                    <p class="question-text">9. Which word describes physical appearance?</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(1, 9, 'A')">A. friendly</button>
+                                        <button class="option-btn" onclick="selectOption(1, 9, 'B')">B. smart</button>
+                                        <button class="option-btn" onclick="selectOption(1, 9, 'C')">C. tall</button>
+                                        <button class="option-btn" onclick="selectOption(1, 9, 'D')">D. kind</button>
+                                    </div>
+                                </div>
+
+                                <div class="question-card">
+                                    <p class="question-text">10. "In my free time, I _____ play video games with my brother."</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(1, 10, 'A')">A. am</button>
+                                        <button class="option-btn" onclick="selectOption(1, 10, 'B')">B. is</button>
+                                        <button class="option-btn" onclick="selectOption(1, 10, 'C')">C. often</button>
+                                        <button class="option-btn" onclick="selectOption(1, 10, 'D')">D. have</button>
+                                    </div>
+                                </div>
+
+                                <button class="submit-quiz-btn" onclick="submitQuiz(1)">Submit Quiz</button>
+
+                                <div id="quizResult1" class="quiz-result"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+      }
+
+      function getChapter2Content() {
+        const color1 = "#f093fb";
+        const color2 = "#f5576c";
+        return `
+                <div id="chapter2">
+                    <div class="tabs">
+                        <button class="tab-btn active" style="background: linear-gradient(135deg, ${color1} 0%, ${color2} 100%); color: white;" onclick="showTab('theory', 2)">📚 Theory</button>
+                        <button class="tab-btn" style="color: ${color2};" onclick="showTab('examples', 2)">📖 Examples</button>
+                        <button class="tab-btn" style="color: ${color2};" onclick="showTab('practice', 2)">✍️ Practice</button>
+                        <button class="tab-btn" style="color: ${color2};" onclick="showTab('quiz', 2)">🎯 Quiz</button>
+                    </div>
+
+                    <div class="content-box">
+                        <div id="theory-2" class="tab-content active">
+                            <h2>🍜 Chapter 2: Culinary and Me</h2>
+                            <div class="info-box" style="border-left-color: ${color2};">
+                                <h3>🎯 Learning Objectives</h3>
+                                <p>Setelah mempelajari chapter ini, kamu akan bisa:</p>
+                                <ul>
+                                    <li>Mendeskripsikan makanan favoritmu</li>
+                                    <li>Menulis resep dalam Bahasa Inggris</li>
+                                    <li>Menggunakan Imperative Sentences (kalimat perintah)</li>
+                                    <li>Memahami Procedure Text</li>
+                                </ul>
+                            </div>
+
+                            <h3>Unit 1 & 2: Describing Food</h3>
+                            <div class="info-box" style="border-left-color: ${color1};">
+                                <h4>Food Vocabulary:</h4>
+                                <p><strong>Taste (Rasa):</strong> sweet, salty, sour, bitter, spicy, savory, delicious</p>
+                                <p><strong>Texture (Tekstur):</strong> crunchy, crispy, soft, chewy, smooth, creamy</p>
+                                <p><strong>Temperature:</strong> hot, warm, cold, frozen</p>
+                            </div>
+
+                            <h3>Unit 3: Procedure Text (Recipe)</h3>
+                            <div class="info-box" style="border-left-color: ${color2};">
+                                <h4>Structure of Procedure Text:</h4>
+                                <ol>
+                                    <li><strong>Goal/Title:</strong> Nama makanan/minuman yang akan dibuat</li>
+                                    <li><strong>Materials/Ingredients:</strong> Bahan-bahan yang diperlukan</li>
+                                    <li><strong>Steps:</strong> Langkah-langkah pembuatan (urut)</li>
+                                </ol>
+                            </div>
+
+                            <div class="info-box" style="border-left-color: ${color1};">
+                                <h4>Language Features:</h4>
+                                <ul>
+                                    <li><strong>Imperative Sentences:</strong> Add, Mix, Cut, Pour, Stir, Boil</li>
+                                    <li><strong>Sequence Words:</strong> First, Second, Then, After that, Next, Finally</li>
+                                    <li><strong>Time Connectors:</strong> for 5 minutes, until done</li>
+                                </ul>
+                            </div>
+
+                            <div class="example-box">
+                                <h4>📝 Example Recipe:</h4>
+                                <p><strong>How to Make Iced Tea</strong></p>
+                                <p><u>Ingredients:</u></p>
+                                <ul>
+                                    <li>2 tea bags</li>
+                                    <li>2 cups of hot water</li>
+                                    <li>3 tablespoons of sugar</li>
+                                    <li>Ice cubes</li>
+                                </ul>
+                                <p><u>Steps:</u></p>
+                                <ol>
+                                    <li>First, <span class="highlight">put</span> the tea bags in hot water.</li>
+                                    <li>Second, <span class="highlight">wait</span> for 3 minutes.</li>
+                                    <li>Then, <span class="highlight">add</span> sugar and <span class="highlight">stir</span> well.</li>
+                                    <li>After that, <span class="highlight">remove</span> the tea bags.</li>
+                                    <li>Next, <span class="highlight">add</span> ice cubes.</li>
+                                    <li>Finally, your iced tea is ready to serve!</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div id="examples-2" class="tab-content">
+                            <h2>📖 More Examples</h2>
+                            <div class="example-box">
+                                <h3>Complete Recipe Example</h3>
+                                <p><strong>How to Make Banana Smoothie</strong></p>
+                                <p><u>Ingredients:</u></p>
+                                <ul>
+                                    <li>2 ripe bananas</li>
+                                    <li>1 cup of milk</li>
+                                    <li>2 tablespoons of honey</li>
+                                    <li>5 ice cubes</li>
+                                </ul>
+                                <p><u>Steps:</u></p>
+                                <ol>
+                                    <li>First, peel the bananas and cut them into small pieces.</li>
+                                    <li>Second, put the banana pieces into the blender.</li>
+                                    <li>Then, add milk, honey, and ice cubes.</li>
+                                    <li>After that, blend all ingredients for 2 minutes until smooth.</li>
+                                    <li>Finally, pour the smoothie into a glass and serve immediately.</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div id="practice-2" class="tab-content">
+                            <h2>✍️ Writing Practice</h2>
+                            <div class="practice-box">
+                                <h3>📝 Task: Write Your Own Recipe</h3>
+                                <p>Tulislah resep makanan atau minuman favoritmu! Jangan lupa struktur:</p>
+                                <ul>
+                                    <li>Title (Judul)</li>
+                                    <li>Ingredients (Bahan-bahan)</li>
+                                    <li>Steps (Langkah-langkah dengan sequence words)</li>
+                                </ul>
+                                <textarea id="practice2-1" placeholder="Example:&#x0a;How to Make...&#x0a;&#x0a;Ingredients:&#x0a;- ...&#x0a;&#x0a;Steps:&#x0a;1. First..."></textarea>
+                                <div class="btn-group">
+                                    <button class="btn btn-primary" onclick="checkPractice(2, 1)">🔍 Check</button>
+                                    <button class="btn btn-secondary" onclick="clearPractice(2, 1)">🗑️ Clear</button>
+                                </div>
+                                <div id="feedback2-1" style="margin-top: 15px;"></div>
+                            </div>
+                        </div>
+
+                        <div id="quiz-2" class="tab-content">
+                            <h2>🎯 Chapter 2 Quiz</h2>
+                            <p style="margin-bottom: 25px;">Uji pemahamanmu tentang Procedure Text!</p>
+                            <div class="quiz-container">
+                                <div class="question-card">
+                                    <p class="question-text">1. Choose the correct imperative sentence for a recipe.</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(2, 1, 'A')">A. She mixes the flour</button>
+                                        <button class="option-btn" onclick="selectOption(2, 1, 'B')">B. Mix the flour</button>
+                                        <button class="option-btn" onclick="selectOption(2, 1, 'C')">C. They mixing the flour</button>
+                                        <button class="option-btn" onclick="selectOption(2, 1, 'D')">D. To mix the flour</button>
+                                    </div>
+                                </div>
+                                <div class="question-card">
+                                    <p class="question-text">2. After heating the water, _____ add the noodles.</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(2, 2, 'A')">A. Finally</button>
+                                        <button class="option-btn" onclick="selectOption(2, 2, 'B')">B. Then</button>
+                                        <button class="option-btn" onclick="selectOption(2, 2, 'C')">C. First</button>
+                                        <button class="option-btn" onclick="selectOption(2, 2, 'D')">D. Goal</button>
+                                    </div>
+                                </div>
+                                <div class="question-card">
+                                    <p class="question-text">3. Chili is very _____. It makes my mouth burn.</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(2, 3, 'A')">A. sweet</button>
+                                        <button class="option-btn" onclick="selectOption(2, 3, 'B')">B. sour</button>
+                                        <button class="option-btn" onclick="selectOption(2, 3, 'C')">C. spicy</button>
+                                        <button class="option-btn" onclick="selectOption(2, 3, 'D')">D. salty</button>
+                                    </div>
+                                </div>
+                                <div class="question-card">
+                                    <p class="question-text">4. Which part lists the tools and items needed?</p>
+                                    <div class="options">
+                                        <button class="option-btn" onclick="selectOption(2, 4, 'A')">A. Steps</button>
+                                        <button class="option-btn" onclick="selectOption(2, 4, 'B')">B. Goal</button>
+                                        <button class="option-btn" onclick="selectOption(2, 4, 'C')">C. Conclusion</button>
+                                        <button class="option-btn" onclick="selectOption(2, 4, 'D')">D. Ingredients</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="submit-quiz-btn" onclick="submitQuiz(2)">Submit Quiz</button>
+                            <div id="quizResult2" class="quiz-result"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+      }
+
+      function getChapter3Content() {
+        const color1 = "#4facfe";
+        const color2 = "#00f2fe";
+        return `<div id="chapter3">
+                <div class="tabs">
+                    <button class="tab-btn active" style="background: linear-gradient(135deg, ${color1} 0%, ${color2} 100%); color: white;" onclick="showTab('theory', 3)">📚 Theory</button>
+                    <button class="tab-btn" style="color: ${color1};" onclick="showTab('examples', 3)">📖 Examples</button>
+                    <button class="tab-btn" style="color: ${color1};" onclick="showTab('practice', 3)">✍️ Practice</button>
+                    <button class="tab-btn" style="color: ${color1};" onclick="showTab('quiz', 3)">🎯 Quiz</button>
+                </div>
+                <div class="content-box">
+                    <div id="theory-3" class="tab-content active">
+                        <h2>🏠 Chapter 3: Home Sweet Home</h2>
+                        <div class="info-box" style="border-left-color: ${color2};">
+                            <h3>🎯 Learning Objectives</h3>
+                            <p>Setelah mempelajari chapter ini, kamu akan bisa:</p>
+                            <ul>
+                                <li>Mendeskripsikan rumah dan ruangan yang ada</li>
+                                <li>Menggunakan Prepositions of Place (in, on, under, beside)</li>
+                                <li>Menyebutkan benda-benda di sekitar rumah</li>
+                            </ul>
+                        </div>
+
+                        <h3>Unit 1: Rooms in the House</h3>
+                        <div class="info-box" style="border-left-color: ${color1};">
+                            <h4>Vocabulary:</h4>
+                            <ul>
+                                <li><strong>Living Room:</strong> tempat bersantai (sofa, TV, table)</li>
+                                <li><strong>Bedroom:</strong> tempat tidur (bed, wardrobe, desk)</li>
+                                <li><strong>Kitchen:</strong> tempat memasak (stove, sink, refrigerator)</li>
+                                <li><strong>Bathroom:</strong> tempat mandi (shower, toilet, mirror)</li>
+                                <li><strong>Dining Room:</strong> tempat makan (dining table, chairs)</li>
+                            </ul>
+                        </div>
+
+                        <h3>Unit 2: Prepositions of Place</h3>
+                        <div class="example-box" style="border-left-color: #ffc107;">
+                            <h4>Fungsi & Contoh:</h4>
+                            <ul>
+                                <li><strong>in:</strong> di dalam (The cat is <span class="highlight">in</span> the box.)</li>
+                                <li><strong>on:</strong> di atas permukaan (The book is <span class="highlight">on</span> the table.)</li>
+                                <li><strong>under:</strong> di bawah (The shoes are <span class="highlight">under</span> the bed.)</li>
+                                <li><strong>beside/next to:</strong> di sebelah (The chair is <span class="highlight">next to</span> the desk.)</li>
+                                <li><strong>between:</strong> di antara dua benda (The sofa is <span class="highlight">between</span> two chairs.)</li>
+                            </ul>
+                        </div>
+
+                        <h3>Unit 3: Describing Your Room (Using 'There is' / 'There are')</h3>
+                        <div class="info-box" style="border-left-color: ${color2};">
+                            <h4>'There is' (Singular) dan 'There are' (Plural):</h4>
+                            <p>Digunakan untuk menyatakan keberadaan benda. Selalu di ikuti kata benda.</p>
+                            <ul>
+                                <li><span class="highlight">There is</span> a big window in the living room. (Ada satu jendela besar)</li>
+                                <li><span class="highlight">There are</span> three chairs in the dining room. (Ada tiga kursi)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="examples-3" class="tab-content"><h2>📖 Examples</h2><p style="font-style: italic;">Contoh-contoh akan ditambahkan segera!</p></div>
+                    <div id="practice-3" class="tab-content"><h2>✍️ Practice</h2><p style="font-style: italic;">Latihan akan ditambahkan segera!</p></div>
+                    <div id="quiz-3" class="tab-content"><h2>🎯 Quiz</h2><p style="font-style: italic;">Quiz akan ditambahkan segera!</p></div>
+                </div>
+            </div>`;
+      }
+
+      function getChapter4Content() {
+        const color1 = "#43e97b";
+        const color2 = "#38f9d7";
+        return `<div id="chapter4">
+                <div class="tabs">
+                    <button class="tab-btn active" style="background: linear-gradient(135deg, ${color1} 0%, ${color2} 100%); color: white;" onclick="showTab('theory', 4)">📚 Theory</button>
+                    <button class="tab-btn" style="color: ${color1};" onclick="showTab('examples', 4)">📖 Examples</button>
+                    <button class="tab-btn" style="color: ${color1};" onclick="showTab('practice', 4)">✍️ Practice</button>
+                    <button class="tab-btn" style="color: ${color1};" onclick="showTab('quiz', 4)">🎯 Quiz</button>
+                </div>
+                <div class="content-box">
+                    <div id="theory-4" class="tab-content active">
+                        <h2>📚 Chapter 4: My School Activities</h2>
+                        <div class="info-box" style="border-left-color: ${color2};">
+                            <h3>🎯 Learning Objectives</h3>
+                            <p>Setelah mempelajari chapter ini, kamu akan bisa:</p>
+                            <ul>
+                                <li>Menyebutkan mata pelajaran dan kegiatan sekolah</li>
+                                <li>Menggunakan Simple Present Tense untuk rutinitas</li>
+                                <li>Menanyakan dan menyebutkan waktu (Time Expressions)</li>
+                            </ul>
+                        </div>
+
+                        <h3>Unit 1: School Subjects and Time</h3>
+                        <div class="info-box" style="border-left-color: ${color1};">
+                            <h4>School Subjects:</h4>
+                            <ul>
+                                <li>Indonesian Language (Bahasa Indonesia)</li>
+                                <li>Math (Matematika)</li>
+                                <li>Science (Ilmu Pengetahuan Alam)</li>
+                                <li>Social Studies (Ilmu Pengetahuan Sosial)</li>
+                                <li>P.E. (Physical Education / Olahraga)</li>
+                            </ul>
+                            <h4 style="margin-top: 20px;">Time Expressions:</h4>
+                            <ul>
+                                <li>At seven o'clock (pukul tujuh)</li>
+                                <li>In the morning / afternoon / evening</li>
+                                <li>On Monday / Tuesday / Wednesday (digunakan untuk hari)</li>
+                            </ul>
+                        </div>
+
+                        <h3>Unit 2: Daily Routine (Simple Present Tense)</h3>
+                        <div class="example-box" style="border-left-color: #ffc107;">
+                            <h4>Contoh Rutinitas:</h4>
+                            <ol>
+                                <li>I <span class="highlight">wake up</span> at 5 AM.</li>
+                                <li>I <span class="highlight">have</span> breakfast at 6 AM.</li>
+                                <li>My school <span class="highlight">starts</span> at 7:30 AM.</li>
+                                <li>I <span class="highlight">study</span> English on Mondays.</li>
+                            </ol>
+                            <p style="margin-top: 15px;">Ingat: Subjek 'He/She/It' menggunakan verb + S (e.g. He <span class="highlight">wakes up</span>)</p>
+                        </div>
+                    </div>
+                    <div id="examples-4" class="tab-content"><h2>📖 Examples</h2><p style="font-style: italic;">Contoh-contoh akan ditambahkan segera!</p></div>
+                    <div id="practice-4" class="tab-content"><h2>✍️ Practice</h2><p style="font-style: italic;">Latihan akan ditambahkan segera!</p></div>
+                    <div id="quiz-4" class="tab-content"><h2>🎯 Quiz</h2><p style="font-style: italic;">Quiz akan ditambahkan segera!</p></div>
+                </div>
+            </div>`;
+      }
+
+      function getChapter5Content() {
+        const color1 = "#fa709a";
+        const color2 = "#fee140";
+        return `<div id="chapter5">
+                <div class="tabs">
+                    <button class="tab-btn active" style="background: linear-gradient(135deg, ${color1} 0%, ${color2} 100%); color: white;" onclick="showTab('theory', 5)">📚 Theory</button>
+                    <button class="tab-btn" style="color: ${color1};" onclick="showTab('examples', 5)">📖 Examples</button>
+                    <button class="tab-btn" style="color: ${color1};" onclick="showTab('practice', 5)">✍️ Practice</button>
+                    <button class="tab-btn" style="color: ${color1};" onclick="showTab('quiz', 5)">🎯 Quiz</button>
+                </div>
+                <div class="content-box">
+                    <div id="theory-5" class="tab-content active">
+                        <h2>🏫 Chapter 5: This is My School</h2>
+                        <div class="info-box" style="border-left-color: ${color2};">
+                            <h3>🎯 Learning Objectives</h3>
+                            <p>Setelah mempelajari chapter ini, kamu akan bisa:</p>
+                            <ul>
+                                <li>Mendeskripsikan fasilitas sekolah</li>
+                                <li>Menggunakan 'There is' / 'There are' dalam konteks sekolah</li>
+                                <li>Menyebutkan kegiatan ekstrakurikuler</li>
+                            </ul>
+                        </div>
+
+                        <h3>Unit 1: School Facilities</h3>
+                        <div class="info-box" style="border-left-color: ${color1};">
+                            <h4>Vocabulary:</h4>
+                            <ul>
+                                <li><strong>Classroom:</strong> Ruang kelas (desk, blackboard/whiteboard)</li>
+                                <li><strong>Library:</strong> Perpustakaan (bookshelf, reading area)</li>
+                                <li><strong>Laboratory:</strong> Laboratorium (science equipment)</li>
+                                <li><strong>Canteen:</strong> Kantin (food stalls, tables)</li>
+                                <li><strong>Teacher's Office:</strong> Ruang Guru</li>
+                                <li><strong>Field/Yard:</strong> Lapangan/Halaman</li>
+                            </ul>
+                        </div>
+
+                        <h3>Unit 2: Describing School Places (There is / There are)</h3>
+                        <div class="example-box" style="border-left-color: #ffc107;">
+                            <h4>Examples:</h4>
+                            <ul>
+                                <li><span class="highlight">There is</span> a big school yard.</li>
+                                <li><span class="highlight">There are</span> twenty classrooms in my school.</li>
+                                <li><span class="highlight">There is</span> one big library <span class="highlight">next to</span> the teacher's office.</li>
+                                <li><span class="highlight">There are</span> many students <span class="highlight">in</span> the canteen during break time.</li>
+                            </ul>
+                        </div>
+
+                        <h3>Unit 3: Extracurricular Activities</h3>
+                        <div class="info-box" style="border-left-color: ${color2};">
+                            <h4>Examples:</h4>
+                            <ul>
+                                <li>Scout (Pramuka)</li>
+                                <li>Basketball / Football Club</li>
+                                <li>English Club</li>
+                                <li>Art / Drawing Club</li>
+                                <li>PMR (Youth Red Cross)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="examples-5" class="tab-content"><h2>📖 Examples</h2><p style="font-style: italic;">Contoh-contoh akan ditambahkan segera!</p></div>
+                    <div id="practice-5" class="tab-content"><h2>✍️ Practice</h2><p style="font-style: italic;">Latihan akan ditambahkan segera!</p></div>
+                    <div id="quiz-5" class="tab-content"><h2>🎯 Quiz</h2><p style="font-style: italic;">Quiz akan ditambahkan segera!</p></div>
+                </div>
+            </div>`;
+      }
+
+      // Quiz Functions
+      function selectOption(chapter, question, option) {
+        if (!quizAnswers[chapter]) quizAnswers[chapter] = {};
+        quizAnswers[chapter][question] = option;
+
+        const buttons =
+          event.target.parentElement.querySelectorAll(".option-btn");
+        buttons.forEach((btn) => btn.classList.remove("selected"));
+        event.target.classList.add("selected");
+      }
+
+      function submitQuiz(chapter) {
+        const correctAnswers = {
+          0: { 1: "A", 2: "B", 3: "B", 4: "B" }, // Chapter 0 Answers
+          1: {
+            1: "B",
+            2: "B",
+            3: "B",
+            4: "D",
+            5: "C",
+            6: "B",
+            7: "D",
+            8: "B",
+            9: "C",
+            10: "C",
+          }, // Chapter 1 Answers
+          2: { 1: "B", 2: "B", 3: "C", 4: "D" }, // Chapter 2 Answers
+          // Chapters 3, 4, 5 currently have no quiz
+        };
+
+        const answers = correctAnswers[chapter];
+        if (!answers) {
+          alert("Quiz untuk Chapter ini sedang dikembangkan.");
+          return;
+        }
+
+        const totalQuestions = Object.keys(answers).length;
+
+        if (
+          !quizAnswers[chapter] ||
+          Object.keys(quizAnswers[chapter]).length < totalQuestions
+        ) {
+          alert(
+            `Mohon jawab semua ${totalQuestions} pertanyaan terlebih dahulu!`
+          );
+          return;
+        }
+
+        let score = 0;
+
+        for (let q = 1; q <= totalQuestions; q++) {
+          const userAnswer = quizAnswers[chapter][q];
+          const correctAnswer = answers[q];
+          const questionCard = document.querySelectorAll(
+            `#chapter${chapter} .question-card`
+          )[q - 1];
+          const buttons = questionCard.querySelectorAll(".option-btn");
+
+          buttons.forEach((btn) => {
+            const option = btn.textContent.charAt(0);
+            if (option === correctAnswer) {
+              btn.classList.add("correct");
+            } else if (option === userAnswer && userAnswer !== correctAnswer) {
+              btn.classList.add("wrong");
+            }
+            btn.disabled = true;
+            btn.style.cursor = "not-allowed";
+          });
+
+          if (userAnswer === correctAnswer) score++;
+        }
+
+        const percentage = (score / totalQuestions) * 100;
+        const resultDiv = document.getElementById(`quizResult${chapter}`);
+
+        let message = "";
+        let bgColor = "";
+
+        if (percentage >= 80) {
+          message = `<h3>🎉 Excellent!</h3><p>Skor kamu: <strong>${score}/${totalQuestions} (${percentage}%)</strong></p><p>Pemahaman kamu sangat baik! Keep up the good work! 🌟</p>`;
+          bgColor = "#e8f5e9";
+        } else if (percentage >= 60) {
+          message = `<h3>👍 Good Job!</h3><p>Skor kamu: <strong>${score}/${totalQuestions} (${percentage}%)</strong></p><p>Lumayan bagus! Tapi masih bisa ditingkatkan lagi. Coba review materi yang salah ya! 📚</p>`;
+          bgColor = "#fff9e6";
+        } else {
+          message = `<h3>💪 Keep Trying!</h3><p>Skor kamu: <strong>${score}/${totalQuestions} (${percentage}%)</strong></p><p>Jangan menyerah! Coba baca lagi materi di tab Theory dan Examples, lalu coba lagi quiz-nya! 🚀</p>`;
+          bgColor = "#ffebee";
+        }
+
+        resultDiv.innerHTML = message;
+        resultDiv.style.background = bgColor;
+        resultDiv.style.borderLeft =
+          "5px solid " +
+          (percentage >= 80
+            ? "#43e97b"
+            : percentage >= 60
+            ? "#ffc107"
+            : "#f5576c");
+        resultDiv.classList.add("show");
+
+        event.target.style.display = "none";
+      }
+
+      // Practice Functions
+      function checkPractice(chapter, task) {
+        const textarea = document.getElementById(`practice${chapter}-${task}`);
+        const feedback = document.getElementById(`feedback${chapter}-${task}`);
+        const text = textarea.value.trim();
+
+        if (text === "") {
+          feedback.innerHTML =
+            '<div class="info-box" style="background: #ffebee; border-left-color: #f5576c;"><strong>⚠️ Oops!</strong><br>Kamu belum menulis apa-apa. Yuk mulai menulis!</div>';
+          return;
+        }
+
+        let score = 0;
+        let tips = [];
+
+        // Check length
+        if (text.length > 150) score += 25;
+        else tips.push("Coba tulis lebih panjang lagi (minimal 150 karakter)");
+
+        // Check for capital letters
+        const sentences = text
+          .split(/[.!?]+/)
+          .filter((s) => s.trim().length > 0);
+
+        let correctCaps = 0;
+        sentences.forEach((s) => {
+          if (/^[A-Z]/.test(s.trim())) {
+            correctCaps++;
+          }
+        });
+
+        if (correctCaps > 0) score += 25;
+        if (correctCaps === sentences.length && sentences.length > 0)
+          tips.push("Good job! Kapitalisasi sudah benar di semua kalimat.");
+        else if (sentences.length > 0)
+          tips.push(
+            "Periksa kembali: Pastikan setiap awal kalimat menggunakan huruf kapital."
+          );
+
+        // Check sentence count
+        if (sentences.length >= 5) score += 25;
+        else tips.push("Minimal 5 kalimat ya!");
+
+        // Check for adjectives or verbs
+        const hasContent =
+          /\b(is|are|am|have|has|like|love|tall|short|kind|smart|friendly|go|eat|study)\b/i.test(
+            text
+          );
+        if (hasContent) score += 25;
+        else tips.push("Gunakan lebih banyak kata sifat dan kata kerja");
+
+        let message = "";
+        let bgColor = "";
+
+        if (score >= 75) {
+          message = `<strong>🎉 Excellent!</strong><br>Score: ${score}/100<br>Tulisan kamu sudah bagus! Keep writing! 🌟`;
+          bgColor = "#e8f5e9";
+        } else if (score >= 50) {
+          message = `<strong>👍 Good Job!</strong><br>Score: ${score}/100<br>Tips:<br>• ${tips.join(
+            "<br>• "
+          )}`;
+          bgColor = "#fff9e6";
+        } else {
+          message = `<strong>💪 Keep Trying!</strong><br>Score: ${score}/100<br>Tips:<br>• ${tips.join(
+            "<br>• "
+          )}`;
+          bgColor = "#ffebee";
+        }
+
+        feedback.innerHTML = `<div class="info-box" style="background: ${bgColor};">${message}</div>`;
+      }
+
+      function clearPractice(chapter, task) {
+        if (confirm("Yakin mau hapus semua tulisan?")) {
+          document.getElementById(`practice${chapter}-${task}`).value = "";
+          document.getElementById(`feedback${chapter}-${task}`).innerHTML = "";
+        }
+      }
+
+      // Initialize
+      console.log("English for Nusantara Platform loaded successfully! 🎓");
+    </script>
+  </body>
+</html>
