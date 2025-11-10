@@ -11,12 +11,12 @@ import {
 } from "lucide-react";
 
 // Import data chapters
-import chapter0Data from "./EasySoal/chapter0Data";
-import chapter1Data from "./EasySoal/chapter1Data";
-import chapter2Data from "./EasySoal/chapter2Data";
-import chapter3Data from "./EasySoal/chapter3Data";
-import chapter4Data from "./EasySoal/chapter4Data";
-import chapter5Data from "./EasySoal/chapter5Data";
+import chapter0Data from "./EasySoal/grade7/chapter0Data";
+import chapter1Data from "./EasySoal/grade7/chapter1Data";
+import chapter2Data from "./EasySoal/grade7/chapter2Data";
+import chapter3Data from "./EasySoal/grade7/chapter3Data";
+import chapter4Data from "./EasySoal/grade7/chapter4Data";
+import chapter5Data from "./EasySoal/grade7/chapter5Data";
 
 export default function EasySoal({ setCurrentPage }) {
   const [formData, setFormData] = useState({
@@ -37,7 +37,7 @@ export default function EasySoal({ setCurrentPage }) {
   const [result, setResult] = useState("");
   const [error, setError] = useState("");
 
-  // Array chapters - Chapter 0-2 ready, Chapter 3-5 tinggal uncomment
+  // Array chapters
   const chapters = [
     chapter0Data,
     chapter1Data,
@@ -120,9 +120,9 @@ export default function EasySoal({ setCurrentPage }) {
     let materiDetail = "";
     selectedChapters.forEach((chapter) => {
       if (chapter) {
-        materiDetail += `\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        materiDetail += `\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
         materiDetail += `${chapter.label.toUpperCase()}\n`;
-        materiDetail += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+        materiDetail += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
         if (chapter.description) {
           materiDetail += `Description: ${chapter.description}\n\n`;
@@ -164,9 +164,9 @@ export default function EasySoal({ setCurrentPage }) {
 Kamu adalah seorang *Expert Guru Bahasa Inggris SMP* yang sangat berpengalaman dan professional dalam menyusun soal-soal berkualitas tinggi.
 Fokus utamamu adalah membuat soal sesuai *Kurikulum Merdeka* dan buku *"English for Nusantara Kelas VII"* terbitan Kemendikdasmen.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 INFORMASI SOAL
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Mata Pelajaran: Bahasa Inggris
 Kelas: VII SMP/MTs
@@ -177,14 +177,14 @@ Total Soal: ${totalSoal}
 Tingkat Kesulitan: ${formData.tingkatKesulitan.toUpperCase()}
 ${formData.fokusMateri ? `\n🎯 Fokus Khusus: ${formData.fokusMateri}` : ""}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📚 MATERI YANG HARUS DICAKUP
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${materiDetail}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🎯 KOMPOSISI SOAL
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ${
   parseInt(formData.jenisSoal.pg) > 0
@@ -207,9 +207,9 @@ ${
     : ""
 }
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚙️ INSTRUKSI PEMBUATAN SOAL
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎯 PRINSIP UTAMA:
 1. SEMUA soal HARUS berdasarkan materi di atas
@@ -262,7 +262,6 @@ ${
     : ""
 }
 
-
 📝 FORMAT SOAL:
 
 1️⃣ PILIHAN GANDA:
@@ -293,9 +292,9 @@ ${
    • Bisa: introduce yourself, describe something, write about experience
    • Include simple scoring rubric atau expected answer
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📄 FORMAT OUTPUT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ${
       formData.mode === "ujian" ? "UJIAN SEMESTER" : "LATIHAN"
@@ -318,31 +317,10 @@ ${
 
 **Instructions:** Choose the correct answer by crossing (X) A, B, C, or D!
 
-[Buat ${formData.jenisSoal.pg} soal pilihan ganda berkualitas dengan format:]
-
-1. [Context/situasi jika perlu]
-   What is your _______ name?
-   A. mother
-   B. father's
-   C. brother
-   D. sister
-
-[Variasikan jenis soal secara seimbang: Vocabulary, Grammar, Comprehension, dan Application. 
-Pastikan setiap kategori muncul minimal satu kali dalam setiap set soal.]
-
-[Variasikan juga format penyajian soal: 
-- Soal Vocabulary dan Grammar bisa berupa kalimat tunggal atau pilihan ganda.
-- Soal Comprehension bisa berbasis teks pendek (5–7 kalimat) dengan 2–3 pertanyaan.
-- Soal Application bisa berupa dialog sederhana atau situasi kehidupan sehari-hari yang relevan bagi siswa SMP.]
-
-[Gunakan HANYA materi, topik, dan konteks yang secara eksplisit disebutkan dalam Kurikulum Merdeka 
-dan buku "English for Nusantara Kelas VII". 
-Jangan gunakan kosakata atau struktur di luar cakupan buku tersebut.]
-
-[Setiap soal harus bersifat STANDALONE — dapat dipahami dan dikerjakan tanpa melihat atau bergantung pada soal lain. 
-Hindari narasi berantai, teks panjang bersama, atau konteks lintas-soal.]
-
-
+[Buat ${formData.jenisSoal.pg} soal pilihan ganda berkualitas]
+[Variasikan jenis soal: Vocabulary, Grammar, Comprehension, Application]
+[Setiap soal STANDALONE - dapat dipahami tanpa soal lain]
+[Gunakan HANYA materi dari chapter yang dipilih]
 `
     : ""
 }
@@ -354,14 +332,9 @@ ${
 
 **Instructions:** Write **T** if the statement is True and **F** if it is False!
 
-[Buat ${formData.jenisSoal.tf} soal True/False dengan format:]
-
-1. Monday is the first day of the week. (_____)
-2. There are thirty days in February. (_____)
-
+[Buat ${formData.jenisSoal.tf} soal True/False]
 [Mix antara vocabulary facts, grammar correctness, dan comprehension]
-[Variasikan antara T dan F - jangan semua T atau semua F]
-
+[Variasikan antara T dan F]
 `
     : ""
 }
@@ -378,30 +351,13 @@ ${
         formData.jenisSoal.matching
       }]
 
-1. Red         (_____)
-2. Blue        (_____)
-3. Green       (_____)
-4. Yellow      (_____)
-5. Black       (_____)
-
 **Column B**
 [Buat ${
         parseInt(formData.jenisSoal.matching) + 2
       } items lettered a-${String.fromCharCode(
         96 + parseInt(formData.jenisSoal.matching) + 2
       )}]
-
-a. Hijau
-b. Merah
-c. Putih
-d. Biru
-e. Kuning
-f. Hitam
-g. Cokelat
-
-[Include 2 distractors yang tidak match dengan apapun]
-[Sesuaikan dengan materi chapter]
-
+[Include 2 distractors yang tidak match]
 `
     : ""
 }
@@ -413,16 +369,9 @@ ${
 
 **Instructions:** Answer the following questions in complete sentences!
 
-[Buat ${formData.jenisSoal.essay} soal essay yang relevant:]
-
-1. Introduce yourself! Tell your name, age, and where you live. 
-   (Write at least 4 complete sentences)
-
-2. [Question 2 - sesuai materi]
-
+[Buat ${formData.jenisSoal.essay} soal essay]
 [Questions harus open-ended dan memicu creative writing]
-[Berikan guidance yang jelas tentang expected answer]
-
+[Berikan guidance yang jelas]
 `
     : ""
 }
@@ -432,15 +381,12 @@ ${
 ## 🔑 ANSWER KEY
 
 ### Part A - Multiple Choice
-[Format: 1. B  2. A  3. D  dst...]
 [Tulis jawaban yang benar untuk SEMUA soal]
 
 ### Part B - True/False
-[Format: 1. T  2. F  3. T  dst...]
 [Tulis T atau F untuk SEMUA soal]
 
 ### Part C - Matching
-[Format: 1-b  2-d  3-a  dst...]
 [Tulis matching yang benar untuk SEMUA items]
 
 ${
@@ -453,21 +399,13 @@ ${
 • Vocabulary (2 points): Appropriate word choice
 • Mechanics (1 point): Correct spelling and punctuation
 
-**Sample Answer 1:**
-[Berikan contoh jawaban lengkap yang bisa dijadikan reference]
-
+**Sample Answer:**
+[Berikan contoh jawaban lengkap]
 `
     : ""
 }
 
 ---
-
-## 📖 PEMBAHASAN (Optional - untuk soal challenging)
-
-[Berikan penjelasan singkat untuk soal-soal yang mungkin membingungkan atau penting]
-[Focus pada grammar rules, vocabulary usage, atau common mistakes]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ⚠️ CRITICAL REMINDERS:
 • Gunakan HANYA vocabulary dan grammar dari materi yang disebutkan
@@ -476,7 +414,6 @@ ${
 • Pastikan kunci jawaban 100% correct
 • Soal harus sesuai level kognitif siswa kelas 7
 • Gunakan konteks yang familiar untuk siswa Indonesia
-• Hindari cultural bias atau konten yang tidak appropriate
 
 Buatlah dengan SANGAT DETAIL, LENGKAP, dan SIAP PAKAI!`;
   };
@@ -507,11 +444,13 @@ Buatlah dengan SANGAT DETAIL, LENGKAP, dan SIAP PAKAI!`;
 
     try {
       const prompt = generatePrompt();
-      const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY;
+
+      // ✅ FIXED: Pakai import.meta.env untuk Vite
+      const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
       if (!GROQ_API_KEY) {
         throw new Error(
-          "API Key tidak ditemukan! Pastikan REACT_APP_GROQ_API_KEY sudah diset di file .env"
+          "API Key tidak ditemukan! Pastikan VITE_GROQ_API_KEY sudah diset di file .env"
         );
       }
 
@@ -622,58 +561,39 @@ Buatlah dengan SANGAT DETAIL, LENGKAP, dan SIAP PAKAI!`;
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Mode Selection */}
             <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <FileQuestion className="w-5 h-5 text-green-600" />
-                Pilih Mode Soal
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                Mode Soal
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => handleModeChange("chapter")}
-                  className={`p-6 rounded-xl border-2 transition-all ${
+                  className={`p-4 rounded-lg border-2 transition-all ${
                     formData.mode === "chapter"
-                      ? "border-green-500 bg-green-50"
-                      : "border-gray-200 hover:border-green-300"
+                      ? "border-green-600 bg-green-50"
+                      : "border-gray-200 hover:border-gray-300"
                   }`}>
-                  <BookOpen
-                    className={`w-8 h-8 mb-3 ${
-                      formData.mode === "chapter"
-                        ? "text-green-600"
-                        : "text-gray-400"
-                    }`}
-                  />
-                  <h3 className="font-bold text-lg mb-2">Per Chapter</h3>
-                  <p className="text-sm text-gray-600">
-                    Soal latihan untuk 1 chapter
-                  </p>
-                  <p className="text-xs text-gray-500 mt-2">
-                    Default: 10 PG, 5 T/F, 5 Matching
-                  </p>
+                  <div className="text-2xl mb-2">📚</div>
+                  <div className="font-semibold text-sm">Per Chapter</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    10 PG, 5 T/F, 5 Matching
+                  </div>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleModeChange("ujian")}
-                  className={`p-6 rounded-xl border-2 transition-all ${
+                  className={`p-4 rounded-lg border-2 transition-all ${
                     formData.mode === "ujian"
-                      ? "border-green-500 bg-green-50"
-                      : "border-gray-200 hover:border-green-300"
+                      ? "border-green-600 bg-green-50"
+                      : "border-gray-200 hover:border-gray-300"
                   }`}>
-                  <FileQuestion
-                    className={`w-8 h-8 mb-3 ${
-                      formData.mode === "ujian"
-                        ? "text-green-600"
-                        : "text-gray-400"
-                    }`}
-                  />
-                  <h3 className="font-bold text-lg mb-2">Ujian Semester</h3>
-                  <p className="text-sm text-gray-600">
-                    Gabungan Beberapa Chapter
-                  </p>
-                  <p className="text-xs text-gray-500 mt-2">
-                    Format: 20 PG, 10 T/F, 10 Matching, 5 Essay
-                  </p>
+                  <div className="text-2xl mb-2">📝</div>
+                  <div className="font-semibold text-sm">Ujian Semester</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    Multi-chapter exam
+                  </div>
                 </button>
               </div>
             </div>
@@ -776,9 +696,10 @@ Buatlah dengan SANGAT DETAIL, LENGKAP, dan SIAP PAKAI!`;
                 Konfigurasi Soal
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Jenis Soal - Grid 4 kolom sejajar */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">
                     Pilihan Ganda
                   </label>
                   <input
@@ -789,12 +710,12 @@ Buatlah dengan SANGAT DETAIL, LENGKAP, dan SIAP PAKAI!`;
                     onChange={(e) =>
                       handleJenisSoalChange("pg", e.target.value)
                     }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none"
+                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none text-center font-semibold"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">
                     True/False
                   </label>
                   <input
@@ -805,13 +726,13 @@ Buatlah dengan SANGAT DETAIL, LENGKAP, dan SIAP PAKAI!`;
                     onChange={(e) =>
                       handleJenisSoalChange("tf", e.target.value)
                     }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none"
+                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none text-center font-semibold"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Matching (Menjodohkan)
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">
+                    Matching
                   </label>
                   <input
                     type="number"
@@ -821,12 +742,12 @@ Buatlah dengan SANGAT DETAIL, LENGKAP, dan SIAP PAKAI!`;
                     onChange={(e) =>
                       handleJenisSoalChange("matching", e.target.value)
                     }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none"
+                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none text-center font-semibold"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">
                     Essay
                   </label>
                   <input
@@ -837,38 +758,40 @@ Buatlah dengan SANGAT DETAIL, LENGKAP, dan SIAP PAKAI!`;
                     onChange={(e) =>
                       handleJenisSoalChange("essay", e.target.value)
                     }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none"
+                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none text-center font-semibold"
                   />
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Tingkat Kesulitan
-                  </label>
-                  <select
-                    name="tingkatKesulitan"
-                    value={formData.tingkatKesulitan}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
-                    <option value="mudah">Mudah</option>
-                    <option value="sedang">Sedang</option>
-                    <option value="sulit">Sulit</option>
-                  </select>
-                </div>
+              {/* Tingkat Kesulitan - Single row */}
+              <div className="mb-4">
+                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                  Tingkat Kesulitan
+                </label>
+                <select
+                  name="tingkatKesulitan"
+                  value={formData.tingkatKesulitan}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none">
+                  <option value="mudah">Mudah</option>
+                  <option value="sedang">Sedang</option>
+                  <option value="sulit">Sulit</option>
+                </select>
+              </div>
 
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Fokus Materi Khusus (Opsional)
-                  </label>
-                  <textarea
-                    name="fokusMateri"
-                    value={formData.fokusMateri}
-                    onChange={handleInputChange}
-                    rows="3"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none"
-                    placeholder="Contoh: Fokus pada vocabulary tentang family members dan telling the time"
-                  />
-                </div>
+              {/* Fokus Materi */}
+              <div className="mb-4">
+                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                  Fokus Materi Khusus (Opsional)
+                </label>
+                <textarea
+                  name="fokusMateri"
+                  value={formData.fokusMateri}
+                  onChange={handleInputChange}
+                  rows="2"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none resize-none"
+                  placeholder="Contoh: Fokus pada vocabulary tentang family members dan telling the time"
+                />
               </div>
 
               {/* Summary */}

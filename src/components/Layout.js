@@ -29,13 +29,13 @@ export default function Layout({
     { id: "report", label: "Laporan" },
   ];
 
-  // E-Learning Menu Items
+  // E-Learning Menu Items - Sesuai struktur file
   const elearningMenuItems = [
     { id: "easymodul", label: "Easy Modul" },
-    { id: "easy-soal", label: "Easy Soal" },
-    { id: "easy-bahan-ajar", label: "Easy Bahan Ajar" },
-    { id: "easy-assessment", label: "Easy Assessment" },
-    { id: "easy-parent", label: "Easy Parent" },
+    { id: "easymateri", label: "Easy Materi" },
+    { id: "easytext", label: "Easy Text" },
+    { id: "easyvocab", label: "Easy Vocab" },
+    { id: "easysoal", label: "Easy Soal" },
   ];
 
   const systemMenuItems = [
@@ -134,12 +134,13 @@ export default function Layout({
         isSidebarOpen={isSidebarOpen}
         isMobileMenuOpen={isMobileMenuOpen}
         toggleMobileMenu={toggleMobileMenu}
+        onLogout={handleLogout}
       />
 
       {/* Main Content */}
       <div
         className={`transition-all duration-300 ${
-          isSidebarOpen ? "lg:ml-64" : "lg:ml-16"
+          isSidebarOpen ? "lg:ml-64" : "lg:ml-20"
         }`}>
         {/* Top Bar */}
         <header className="bg-white border-b border-gray-200 sticky top-0 z-30">

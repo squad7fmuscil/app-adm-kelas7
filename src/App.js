@@ -10,12 +10,14 @@ import StudentNotes from "./page/StudentNotes";
 import Schedule from "./page/Schedule";
 import Report from "./reports/Report";
 import Setting from "./page/Setting";
-import MonitorSistem from "./system/MonitorSistem"; // ✅ Sudah diimport
+import MonitorSistem from "./system/MonitorSistem";
+
+// E-Learning Components - Sesuai struktur file
 import EasyModul from "./e-learning/EasyModul";
+import EasyMateri from "./e-learning/EasyMateri";
+import EasyText from "./e-learning/EasyText";
+import EasyVocab from "./e-learning/EasyVocab";
 import EasySoal from "./e-learning/EasySoal";
-import EasyBahanAjar from "./e-learning/EasyBahanAjar";
-import EasyAssessment from "./e-learning/EasyAssessment";
-import EasyParent from "./e-learning/EasyParent";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -123,7 +125,7 @@ export default function App() {
       case "report":
         return <Report currentUser={currentUser} />;
 
-      // Easy Modul Routes
+      // E-Learning Routes - Sesuai struktur file
       case "easymodul":
         return (
           <EasyModul
@@ -132,40 +134,37 @@ export default function App() {
           />
         );
 
-      case "easy-soal":
+      case "easymateri":
+        return (
+          <EasyMateri
+            currentUser={currentUser}
+            setCurrentPage={setCurrentPage}
+          />
+        );
+
+      case "easytext":
+        return (
+          <EasyText currentUser={currentUser} setCurrentPage={setCurrentPage} />
+        );
+
+      case "easyvocab":
+        return (
+          <EasyVocab
+            currentUser={currentUser}
+            setCurrentPage={setCurrentPage}
+          />
+        );
+
+      case "easysoal":
         return (
           <EasySoal currentUser={currentUser} setCurrentPage={setCurrentPage} />
-        );
-
-      case "easy-bahan-ajar":
-        return (
-          <EasyBahanAjar
-            currentUser={currentUser}
-            setCurrentPage={setCurrentPage}
-          />
-        );
-
-      case "easy-assessment":
-        return (
-          <EasyAssessment
-            currentUser={currentUser}
-            setCurrentPage={setCurrentPage}
-          />
-        );
-
-      case "easy-parent":
-        return (
-          <EasyParent
-            currentUser={currentUser}
-            setCurrentPage={setCurrentPage}
-          />
         );
 
       case "setting":
         return <Setting currentUser={currentUser} />;
 
       case "sistem":
-        return <MonitorSistem currentUser={currentUser} />; // ✅ FIXED: Ganti Sistem jadi MonitorSistem
+        return <MonitorSistem currentUser={currentUser} />;
 
       default:
         return (

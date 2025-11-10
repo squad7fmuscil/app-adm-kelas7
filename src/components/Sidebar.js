@@ -18,8 +18,6 @@ import {
   GraduationCap,
   FileStack,
   ClipboardList,
-  UserCheck,
-  UsersRound,
 } from "lucide-react";
 
 export default function Sidebar({
@@ -43,13 +41,13 @@ export default function Sidebar({
     { id: "report", label: "Laporan", icon: BarChart3 },
   ];
 
-  // Menu E-Learning dengan submenu - UPDATED IDs
+  // Menu E-Learning dengan submenu - Sesuai struktur file
   const elearningSubmenus = [
     { id: "easymodul", label: "Easy Modul", icon: BookOpenCheck },
-    { id: "easy-soal", label: "Easy Soal", icon: ClipboardList },
-    { id: "easy-bahan-ajar", label: "Easy Bahan Ajar", icon: FileStack },
-    { id: "easy-assessment", label: "Easy Assessment", icon: UserCheck },
-    { id: "easy-parent", label: "Easy Parent", icon: UsersRound },
+    { id: "easymateri", label: "Easy Materi", icon: FileStack },
+    { id: "easytext", label: "Easy Text", icon: FileText },
+    { id: "easyvocab", label: "Easy Vocab", icon: BookOpen },
+    { id: "easysoal", label: "Easy Soal", icon: ClipboardList },
   ];
 
   const systemMenuItems = [
@@ -371,12 +369,12 @@ export default function Sidebar({
             </div>
           </nav>
 
-          {/* User Info & Logout */}
+          {/* User Info */}
           <div className="border-t border-white/10 p-3 backdrop-blur-sm">
             {/* User Card */}
             <div
               className={`
-              bg-white/5 backdrop-blur-sm rounded-xl p-3 mb-2 border border-white/10
+              bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10
               hover:bg-white/10 transition-all duration-200 group
               ${!isSidebarOpen && "lg:p-2"}
             `}>
@@ -404,29 +402,6 @@ export default function Sidebar({
                 )}
               </div>
             </div>
-
-            {/* Logout Button */}
-            {onLogout && (
-              <button
-                onClick={onLogout}
-                className={`
-                  group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
-                  bg-red-500/10 hover:bg-red-500/20 text-red-300 hover:text-red-200
-                  border border-red-500/20 hover:border-red-500/30
-                  transition-all duration-200
-                  ${!isSidebarOpen && "lg:justify-center lg:px-2"}
-                `}
-                title={!isSidebarOpen ? "Logout" : ""}>
-                <LogOut
-                  size={18}
-                  strokeWidth={2}
-                  className="flex-shrink-0 group-hover:scale-110 transition-transform duration-200"
-                />
-                {isSidebarOpen && (
-                  <span className="font-medium text-sm">Logout</span>
-                )}
-              </button>
-            )}
           </div>
         </div>
 
