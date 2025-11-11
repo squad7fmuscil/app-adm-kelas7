@@ -36,7 +36,7 @@ export default function Attendance({ currentUser }) {
   });
 
   // Current semester & academic year
-  const currentSemester = "1";
+  const currentSemester = "ganjil"; // ✅ Ganti dari "1" ke "ganjil"
   const currentAcademicYear = "2025/2026";
 
   // NEW: Fetch teacher assignments

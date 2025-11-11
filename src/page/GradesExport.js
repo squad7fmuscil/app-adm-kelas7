@@ -1,4 +1,4 @@
-// GradesExport.js - SMP Muslimin Cililin - Fixed
+// GradesExport.js - Complete Version
 import ExcelJS from "exceljs";
 import { supabase } from "../supabaseClient";
 import {
@@ -59,7 +59,7 @@ export const ImportModal = ({
 
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet("Template Nilai");
-      const numColumns = 8; // Kolom A-H
+      const numColumns = 8;
 
       worksheet.columns = [
         { key: "No", width: 5 },
@@ -76,7 +76,7 @@ export const ImportModal = ({
         ["SMP MUSLIMIN CILILIN"],
         [`TEMPLATE INPUT NILAI - ${selectedSubject || "MATA PELAJARAN"}`],
         [`KELAS ${selectedClass}`],
-        ["Tahun Ajaran: 2025/2026 - Semester 1"],
+        ["Tahun Ajaran: 2025/2026 - Semester Ganjil"],
         [""],
       ];
 
@@ -114,7 +114,6 @@ export const ImportModal = ({
       headerRow.height = 30;
 
       headerRow.eachCell((cell, colNumber) => {
-        // Pastikan colNumber dan index ada
         cell.fill = {
           type: "pattern",
           pattern: "solid",
@@ -132,16 +131,6 @@ export const ImportModal = ({
           bottom: { style: "thin" },
           right: { style: "thin" },
         };
-
-        if (colNumber >= 4 && colNumber <= 8) {
-          // Kolom nilai
-          cell.alignment = { vertical: "middle", horizontal: "center" };
-          cell.numFmt = "0";
-        } else if (colNumber > 8) {
-          // Tidak ada kolom ke-9 di template
-        } else {
-          cell.alignment = { vertical: "middle", horizontal: "left" };
-        }
       });
 
       currentRow++;
@@ -169,7 +158,6 @@ export const ImportModal = ({
             cell.alignment = { vertical: "middle", horizontal: "center" };
           }
           if (index % 2 !== 0) {
-            // Memberi warna abu-abu untuk baris ganjil data
             cell.fill = {
               type: "pattern",
               pattern: "solid",
@@ -179,11 +167,9 @@ export const ImportModal = ({
         });
       });
 
-      currentRow++; // Baris kosong setelah data siswa
-
-      // Bagian Tanda Tangan
+      currentRow++;
       currentRow += 2;
-      const startCol = 7; // Mulai dari kolom G (index 7)
+      const startCol = 7;
 
       const signRow1 = worksheet.getRow(currentRow + 0);
       signRow1.getCell(startCol).value = "Mengetahui,";
@@ -322,7 +308,7 @@ export const ImportModal = ({
         parsedData.push(rowData);
       });
 
-      setPreviewData(parsedData.slice(0, 10));
+      setPreviewData(parsedData); // ✅ TAMPILKAN SEMUA DATA (bukan .slice(0, 10))
       setValidData(validList);
       setErrors(errorList);
       setStep("preview");
@@ -335,7 +321,7 @@ export const ImportModal = ({
     }
   };
 
-  // Import to Database
+  // Import to Database - BATCH VERSION (FAST)
   const handleImport = async () => {
     if (validData.length === 0) {
       alert("Tidak ada data valid untuk diimport!");
@@ -363,59 +349,143 @@ export const ImportModal = ({
         PSAS: "PSAS",
       };
 
+      console.log("=== START BATCH IMPORT ===");
+      console.log("Valid Data Count:", validData.length);
+
+      // Step 1: Kumpulkan semua student_id dan category
+      const studentNISList = validData.map((s) => s.nis);
+      const allCategories = Object.keys(gradeTypeMap).map(
+        (k) => gradeTypeMap[k]
+      );
+
+      console.log(
+        "Checking existing grades for",
+        studentNISList.length,
+        "students"
+      );
+
+      // Step 2: Ambil SEMUA existing grades sekaligus (1 query)
+      const { data: existingGrades, error: fetchError } = await supabase
+        .from("grades")
+        .select("id, student_id, category")
+        .in("student_id", studentNISList)
+        .in("category", allCategories);
+
+      if (fetchError) throw fetchError;
+
+      console.log("Found", existingGrades?.length || 0, "existing grades");
+
+      // Step 3: Buat map untuk lookup cepat
+      const existingMap = {};
+      existingGrades?.forEach((grade) => {
+        const key = `${grade.student_id}_${grade.category}`;
+        existingMap[key] = grade.id;
+      });
+
+      // Step 4: Pisahkan data untuk UPDATE dan INSERT
+      const dataToUpdate = [];
+      const dataToInsert = [];
+
+      validData.forEach((student) => {
+        Object.entries(student.grades).forEach(([type, nilai]) => {
+          const category = gradeTypeMap[type];
+          const key = `${student.nis}_${category}`;
+          const gradeData = {
+            student_id: student.nis,
+            category: category,
+            score: parseFloat(nilai),
+            date: today,
+            notes: `${selectedSubject} - ${selectedClass}`,
+          };
+
+          if (existingMap[key]) {
+            dataToUpdate.push({
+              id: existingMap[key],
+              ...gradeData,
+            });
+          } else {
+            dataToInsert.push(gradeData);
+          }
+        });
+      });
+
+      console.log("To Insert:", dataToInsert.length);
+      console.log("To Update:", dataToUpdate.length);
+
       let successCount = 0;
       let errorCount = 0;
 
-      for (const student of validData) {
-        for (const [type, nilai] of Object.entries(student.grades)) {
-          try {
-            // Check if grade exists
-            const { data: existing } = await supabase
-              .from("grades")
-              .select("id")
-              .eq("student_id", student.nis)
-              .eq("category", gradeTypeMap[type])
-              .single();
+      // Step 5: BATCH INSERT
+      if (dataToInsert.length > 0) {
+        console.log("Inserting", dataToInsert.length, "new grades...");
+        const { error: insertError } = await supabase
+          .from("grades")
+          .insert(dataToInsert);
 
-            if (existing) {
-              // Update
-              const { error } = await supabase
-                .from("grades")
-                .update({
-                  score: parseFloat(nilai),
-                  date: today,
-                  notes: `${selectedSubject} - ${selectedClass}`,
-                })
-                .eq("id", existing.id);
-
-              if (error) throw error;
-            } else {
-              // Insert
-              const { error } = await supabase.from("grades").insert({
-                student_id: student.nis,
-                category: gradeTypeMap[type],
-                score: parseFloat(nilai),
-                date: today,
-                notes: `${selectedSubject} - ${selectedClass}`,
-              });
-
-              if (error) throw error;
-            }
-            successCount++;
-          } catch (err) {
-            console.error("Error importing grade:", err);
-            errorCount++;
-          }
+        if (insertError) {
+          console.error("Insert error:", insertError);
+          errorCount += dataToInsert.length;
+        } else {
+          console.log("✅ Insert success!");
+          successCount += dataToInsert.length;
         }
       }
 
-      alert(
-        `✅ Import selesai!\nBerhasil: ${successCount} nilai\nGagal: ${errorCount} nilai`
-      );
+      // Step 6: BATCH UPDATE (10 at a time)
+      if (dataToUpdate.length > 0) {
+        console.log("Updating", dataToUpdate.length, "existing grades...");
+
+        const batchSize = 10;
+        for (let i = 0; i < dataToUpdate.length; i += batchSize) {
+          const batch = dataToUpdate.slice(i, i + batchSize);
+
+          const updatePromises = batch.map((item) =>
+            supabase
+              .from("grades")
+              .update({
+                score: item.score,
+                date: item.date,
+                notes: item.notes,
+              })
+              .eq("id", item.id)
+          );
+
+          const results = await Promise.all(updatePromises);
+
+          results.forEach((result) => {
+            if (result.error) {
+              console.error("Update error:", result.error);
+              errorCount++;
+            } else {
+              successCount++;
+            }
+          });
+        }
+
+        console.log("✅ Update complete!");
+      }
+
+      console.log("=== IMPORT COMPLETE ===");
+      console.log("Success:", successCount);
+      console.log("Errors:", errorCount);
+
+      if (errorCount > 0) {
+        alert(
+          `⚠️ Import selesai dengan error!\n\n` +
+            `Berhasil: ${successCount} nilai\n` +
+            `Gagal: ${errorCount} nilai`
+        );
+      } else {
+        alert(
+          `✅ Import berhasil!\n\n` +
+            `Total: ${successCount} nilai berhasil diimport`
+        );
+      }
+
       handleClose();
       onImportSuccess();
     } catch (error) {
-      console.error("Error importing:", error);
+      console.error("=== IMPORT FATAL ERROR ===", error);
       alert("Error import data: " + error.message);
     } finally {
       setImporting(false);
@@ -426,7 +496,7 @@ export const ImportModal = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+      <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -576,12 +646,12 @@ export const ImportModal = ({
 
               <div>
                 <h4 className="font-bold text-gray-900 mb-3">
-                  Preview Data (10 baris pertama)
+                  Preview Data - Total: {previewData.length} baris
                 </h4>
                 <div className="border border-gray-200 rounded-lg overflow-hidden">
-                  <div className="overflow-x-auto">
+                  <div className="overflow-x-auto max-h-96 overflow-y-auto">
                     <table className="w-full text-sm">
-                      <thead className="bg-gray-100">
+                      <thead className="bg-gray-100 sticky top-0">
                         <tr>
                           <th className="px-3 py-2 text-left font-semibold">
                             Row
@@ -780,7 +850,7 @@ export const exportToExcel = async ({
     workbook.modified = new Date();
 
     const worksheet = workbook.addWorksheet("Nilai Siswa");
-    const numColumns = 9; // Kolom A-I
+    const numColumns = 9;
 
     worksheet.columns = [
       { key: "No", width: 5 },
@@ -802,7 +872,7 @@ export const exportToExcel = async ({
         }`,
       ],
       [`KELAS ${selectedClass}`],
-      ["Tahun Ajaran: 2025/2026 - Semester 1"],
+      ["Tahun Ajaran: 2025/2026 - Semester Ganjil"],
       [""],
     ];
 

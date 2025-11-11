@@ -180,7 +180,7 @@ const Grades = ({ userData, currentUser }) => {
   const [loadingAssignments, setLoadingAssignments] = useState(true);
 
   const teacherId = user?.teacher_id || user?.id;
-  const currentSemester = "1";
+  const currentSemester = "ganjil";
   const currentAcademicYear = "2025/2026";
 
   console.log("DEBUG Grades - user object:", user);
