@@ -31,32 +31,117 @@ export default function Sidebar({
 }) {
   const [isElearningOpen, setIsElearningOpen] = useState(false);
 
+  // Menu items dengan role-based access
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "students", label: "Data Siswa", icon: Users },
-    { id: "attendance", label: "Presensi", icon: ClipboardCheck },
-    { id: "grades", label: "Nilai", icon: FileText },
-    { id: "notes", label: "Catatan", icon: BookOpen },
-    { id: "schedule", label: "Jadwal", icon: Calendar },
-    { id: "report", label: "Laporan", icon: BarChart3 },
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      roles: ["admin", "teacher"],
+    },
+    {
+      id: "students",
+      label: "Data Siswa",
+      icon: Users,
+      roles: ["admin", "teacher"],
+    },
+    {
+      id: "attendance",
+      label: "Presensi",
+      icon: ClipboardCheck,
+      roles: ["admin", "teacher"],
+    },
+    {
+      id: "grades",
+      label: "Nilai",
+      icon: FileText,
+      roles: ["admin", "teacher"],
+    },
+    {
+      id: "notes",
+      label: "Catatan Siswa",
+      icon: BookOpen,
+      roles: ["admin", "teacher"],
+    },
+    {
+      id: "schedule",
+      label: "Jadwal",
+      icon: Calendar,
+      roles: ["admin", "teacher"],
+    },
+    {
+      id: "report",
+      label: "Laporan",
+      icon: BarChart3,
+      roles: ["admin", "teacher"],
+    },
   ];
 
-  // Menu E-Learning dengan submenu - Sesuai struktur file
+  // E-Learning submenu dengan role-based access
   const elearningSubmenus = [
-    { id: "easymodul", label: "Easy Modul", icon: BookOpenCheck },
-    { id: "easymateri", label: "Easy Materi", icon: FileStack },
-    { id: "easytext", label: "Easy Text", icon: FileText },
-    { id: "easyvocab", label: "Easy Vocab", icon: BookOpen },
-    { id: "easysoal", label: "Easy Soal", icon: ClipboardList },
+    {
+      id: "easymodul",
+      label: "Easy Modul",
+      icon: BookOpenCheck,
+      roles: ["admin", "teacher"],
+    },
+    {
+      id: "easymateri",
+      label: "Easy Materi",
+      icon: FileStack,
+      roles: ["admin", "teacher"],
+    },
+    {
+      id: "easytext",
+      label: "Easy Text",
+      icon: FileText,
+      roles: ["admin", "teacher"],
+    },
+    {
+      id: "easyvocab",
+      label: "Easy Vocab",
+      icon: BookOpen,
+      roles: ["admin", "teacher"],
+    },
+    {
+      id: "easysoal",
+      label: "Easy Soal",
+      icon: ClipboardList,
+      roles: ["admin", "teacher"],
+    },
   ];
 
+  // System menu - HANYA untuk admin
   const systemMenuItems = [
-    { id: "setting", label: "Pengaturan", icon: Settings },
-    { id: "sistem", label: "Monitor", icon: Monitor },
+    {
+      id: "setting",
+      label: "Pengaturan",
+      icon: Settings,
+      roles: ["admin"],
+    },
+    {
+      id: "sistem",
+      label: "Monitor",
+      icon: Monitor,
+      roles: ["admin"],
+    },
   ];
+
+  // Filter menu berdasarkan role user
+  const filteredMenuItems = menuItems.filter((item) =>
+    item.roles.includes(currentUser?.role)
+  );
+
+  const filteredElearningSubmenus = elearningSubmenus.filter((item) =>
+    item.roles.includes(currentUser?.role)
+  );
+
+  const filteredSystemMenuItems = systemMenuItems.filter((item) =>
+    item.roles.includes(currentUser?.role)
+  );
 
   // Check if current page is in e-learning submenu
-  const isElearningActive = elearningSubmenus.some(
+  const isElearningActive = filteredElearningSubmenus.some(
     (item) => item.id === currentPage
   );
 
@@ -132,7 +217,7 @@ export default function Sidebar({
           <nav className="flex-1 p-3 overflow-y-auto custom-scrollbar">
             {/* Main Menu */}
             <div className="space-y-1 mb-3">
-              {menuItems.map((item) => {
+              {filteredMenuItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = currentPage === item.id;
 
@@ -188,185 +273,189 @@ export default function Sidebar({
               })}
             </div>
 
-            {/* E-Learning Menu Section */}
-            <div className="mb-3">
-              {/* E-Learning Header/Toggle */}
-              <button
-                onClick={() => {
-                  if (isSidebarOpen) {
-                    setIsElearningOpen(!isElearningOpen);
-                  } else {
-                    // If sidebar collapsed, expand it first
-                    setIsElearningOpen(true);
-                  }
-                }}
-                className={`
-                  group relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200
-                  ${!isSidebarOpen && "lg:justify-center lg:px-2"}
-                  ${
-                    isElearningActive
-                      ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30"
-                      : "text-blue-100/80 hover:bg-white/10 hover:text-white"
-                  }
-                `}
-                title={!isSidebarOpen ? "E-Learning" : ""}>
-                {/* Active indicator */}
-                {isElearningActive && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full"></div>
-                )}
-
-                <GraduationCap
-                  size={20}
-                  strokeWidth={2}
-                  className={`flex-shrink-0 transition-transform duration-200 ${
-                    isElearningActive ? "scale-110" : "group-hover:scale-110"
-                  }`}
-                />
-
-                {isSidebarOpen && (
-                  <>
-                    <span className="font-medium text-sm flex-1 text-left">
-                      E-Learning
-                    </span>
-                    <ChevronDown
-                      size={16}
-                      className={`transition-transform duration-200 ${
-                        isElearningOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </>
-                )}
-
-                {/* Hover glow effect */}
-                {!isElearningActive && (
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 to-blue-500/0 group-hover:from-blue-500/10 group-hover:to-blue-500/10 transition-all duration-300"></div>
-                )}
-              </button>
-
-              {/* E-Learning Submenus */}
-              {isSidebarOpen && (
-                <div
-                  className={`
-                    overflow-hidden transition-all duration-300 ease-in-out
-                    ${
-                      isElearningOpen
-                        ? "max-h-[400px] opacity-100 mt-1"
-                        : "max-h-0 opacity-0"
+            {/* E-Learning Menu Section - Hanya tampilkan jika ada submenu yang accessible */}
+            {filteredElearningSubmenus.length > 0 && (
+              <div className="mb-3">
+                {/* E-Learning Header/Toggle */}
+                <button
+                  onClick={() => {
+                    if (isSidebarOpen) {
+                      setIsElearningOpen(!isElearningOpen);
+                    } else {
+                      // If sidebar collapsed, expand it first
+                      setIsElearningOpen(true);
                     }
-                  `}>
-                  <div className="space-y-0.5 pl-3 border-l-2 border-blue-500/30 ml-5">
-                    {elearningSubmenus.map((item) => {
-                      const Icon = item.icon;
-                      const isActive = currentPage === item.id;
+                  }}
+                  className={`
+                    group relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200
+                    ${!isSidebarOpen && "lg:justify-center lg:px-2"}
+                    ${
+                      isElearningActive
+                        ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30"
+                        : "text-blue-100/80 hover:bg-white/10 hover:text-white"
+                    }
+                  `}
+                  title={!isSidebarOpen ? "E-Learning" : ""}>
+                  {/* Active indicator */}
+                  {isElearningActive && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full"></div>
+                  )}
 
-                      return (
-                        <button
-                          key={item.id}
-                          onClick={() => {
-                            onPageChange(item.id);
-                            if (window.innerWidth < 1024) {
-                              toggleMobileMenu();
-                            }
-                          }}
-                          className={`
-                            group relative w-full flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all duration-200
-                            ${
-                              isActive
-                                ? "bg-gradient-to-r from-blue-500/30 to-blue-600/30 text-white shadow-md"
-                                : "text-blue-100/70 hover:bg-white/5 hover:text-white"
-                            }
-                          `}>
-                          <Icon
-                            size={18}
-                            strokeWidth={2}
-                            className={`flex-shrink-0 transition-transform duration-200 ${
-                              isActive ? "scale-110" : "group-hover:scale-110"
-                            }`}
-                          />
+                  <GraduationCap
+                    size={20}
+                    strokeWidth={2}
+                    className={`flex-shrink-0 transition-transform duration-200 ${
+                      isElearningActive ? "scale-110" : "group-hover:scale-110"
+                    }`}
+                  />
 
-                          <span className="font-medium text-sm flex-1 text-left">
-                            {item.label}
-                          </span>
-
-                          {isActive && (
-                            <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                          )}
-
-                          {/* Hover glow effect */}
-                          {!isActive && (
-                            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:to-blue-500/5 transition-all duration-300"></div>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* System Menu Section */}
-            <div className="border-t border-white/10 pt-3">
-              {isSidebarOpen && (
-                <p className="text-[10px] font-bold text-blue-300/60 uppercase tracking-wider px-3 mb-2 flex items-center gap-2">
-                  <span className="w-3 h-px bg-blue-400/30"></span>
-                  System
-                </p>
-              )}
-              <div className="space-y-1">
-                {systemMenuItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = currentPage === item.id;
-
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        onPageChange(item.id);
-                        if (window.innerWidth < 1024) {
-                          toggleMobileMenu();
-                        }
-                      }}
-                      className={`
-                        group relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200
-                        ${!isSidebarOpen && "lg:justify-center lg:px-2"}
-                        ${
-                          isActive
-                            ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30"
-                            : "text-blue-100/80 hover:bg-white/10 hover:text-white"
-                        }
-                      `}
-                      title={!isSidebarOpen ? item.label : ""}>
-                      {isActive && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full"></div>
-                      )}
-
-                      <Icon
-                        size={20}
-                        strokeWidth={2}
-                        className={`flex-shrink-0 transition-transform duration-200 ${
-                          isActive ? "scale-110" : "group-hover:scale-110"
+                  {isSidebarOpen && (
+                    <>
+                      <span className="font-medium text-sm flex-1 text-left">
+                        E-Learning
+                      </span>
+                      <ChevronDown
+                        size={16}
+                        className={`transition-transform duration-200 ${
+                          isElearningOpen ? "rotate-180" : ""
                         }`}
                       />
+                    </>
+                  )}
 
-                      {isSidebarOpen && (
-                        <>
-                          <span className="font-medium text-sm flex-1 text-left">
-                            {item.label}
-                          </span>
-                          {isActive && (
-                            <ChevronRight size={16} className="opacity-70" />
-                          )}
-                        </>
-                      )}
+                  {/* Hover glow effect */}
+                  {!isElearningActive && (
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 to-blue-500/0 group-hover:from-blue-500/10 group-hover:to-blue-500/10 transition-all duration-300"></div>
+                  )}
+                </button>
 
-                      {!isActive && (
-                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-300"></div>
-                      )}
-                    </button>
-                  );
-                })}
+                {/* E-Learning Submenus */}
+                {isSidebarOpen && (
+                  <div
+                    className={`
+                      overflow-hidden transition-all duration-300 ease-in-out
+                      ${
+                        isElearningOpen
+                          ? "max-h-[400px] opacity-100 mt-1"
+                          : "max-h-0 opacity-0"
+                      }
+                    `}>
+                    <div className="space-y-0.5 pl-3 border-l-2 border-blue-500/30 ml-5">
+                      {filteredElearningSubmenus.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = currentPage === item.id;
+
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => {
+                              onPageChange(item.id);
+                              if (window.innerWidth < 1024) {
+                                toggleMobileMenu();
+                              }
+                            }}
+                            className={`
+                              group relative w-full flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all duration-200
+                              ${
+                                isActive
+                                  ? "bg-gradient-to-r from-blue-500/30 to-blue-600/30 text-white shadow-md"
+                                  : "text-blue-100/70 hover:bg-white/5 hover:text-white"
+                              }
+                            `}>
+                            <Icon
+                              size={18}
+                              strokeWidth={2}
+                              className={`flex-shrink-0 transition-transform duration-200 ${
+                                isActive ? "scale-110" : "group-hover:scale-110"
+                              }`}
+                            />
+
+                            <span className="font-medium text-sm flex-1 text-left">
+                              {item.label}
+                            </span>
+
+                            {isActive && (
+                              <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                            )}
+
+                            {/* Hover glow effect */}
+                            {!isActive && (
+                              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:to-blue-500/5 transition-all duration-300"></div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
+
+            {/* System Menu Section - Hanya tampilkan untuk admin */}
+            {filteredSystemMenuItems.length > 0 && (
+              <div className="border-t border-white/10 pt-3">
+                {isSidebarOpen && (
+                  <p className="text-[10px] font-bold text-blue-300/60 uppercase tracking-wider px-3 mb-2 flex items-center gap-2">
+                    <span className="w-3 h-px bg-blue-400/30"></span>
+                    System
+                  </p>
+                )}
+                <div className="space-y-1">
+                  {filteredSystemMenuItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = currentPage === item.id;
+
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          onPageChange(item.id);
+                          if (window.innerWidth < 1024) {
+                            toggleMobileMenu();
+                          }
+                        }}
+                        className={`
+                          group relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200
+                          ${!isSidebarOpen && "lg:justify-center lg:px-2"}
+                          ${
+                            isActive
+                              ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30"
+                              : "text-blue-100/80 hover:bg-white/10 hover:text-white"
+                          }
+                        `}
+                        title={!isSidebarOpen ? item.label : ""}>
+                        {isActive && (
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full"></div>
+                        )}
+
+                        <Icon
+                          size={20}
+                          strokeWidth={2}
+                          className={`flex-shrink-0 transition-transform duration-200 ${
+                            isActive ? "scale-110" : "group-hover:scale-110"
+                          }`}
+                        />
+
+                        {isSidebarOpen && (
+                          <>
+                            <span className="font-medium text-sm flex-1 text-left">
+                              {item.label}
+                            </span>
+                            {isActive && (
+                              <ChevronRight size={16} className="opacity-70" />
+                            )}
+                          </>
+                        )}
+
+                        {!isActive && (
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-300"></div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </nav>
 
           {/* User Info */}
